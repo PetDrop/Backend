@@ -12,17 +12,23 @@ public class Account {
     private String username;
     private String email;
     private String password;
+    private String phone;
     private String address;
     private String[] emergencyContacts;
     
-    public Account(String id, String username, String email, String password, String address, String[] emergencyContacts) {
+    public Account(String id, String username, String email, String password, String phone, String address, String[] emergencyContacts) {
         super();
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phone = phone;
         this.address = address;
         this.emergencyContacts = emergencyContacts;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -37,12 +43,20 @@ public class Account {
         return password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
     public String getAddress() {
         return address;
     }
 
     public String[] getEmergencyContacts() {
         return emergencyContacts;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
@@ -55,6 +69,10 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setAddress(String address) {
