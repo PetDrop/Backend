@@ -37,27 +37,27 @@ public class PetController {
     }
 
     // update a pet's username
-    @PatchMapping("/updatepet/username/{id}")
-    public long updatePetUsername(@PathVariable String id, @RequestBody String username) {
-        return petRepo.updatePetName(id, username);
+    @PatchMapping("/updatepet/name/{id}")
+    public long updatePetName(@PathVariable String id, @RequestBody String name) {
+        return petRepo.updatePetName(id, name);
     }
 
     // update a pet's email
-    @PatchMapping("/updatepet/email/{id}")
-    public long updatePetEmail(@PathVariable String id, @RequestBody String email) {
-        return petRepo.updatePetImage(id, email);
+    @PatchMapping("/updatepet/image/{id}")
+    public long updatePetImage(@PathVariable String id, @RequestBody String image) {
+        return petRepo.updatePetImage(id, image);
     }
 
     // update a pet's password
-    @PatchMapping("/updatepet/password/{id}")
-    public long updatePetPassword(@PathVariable String id, @RequestBody String password) {
-        return petRepo.updatePetAge(id, password);
+    @PatchMapping("/updatepet/age/{id}")
+    public long updatePetAge(@PathVariable String id, @RequestBody int age) {
+        return petRepo.updatePetAge(id, age);
     }
 
     // update a pet's phone number
-    @PatchMapping("/updatepet/phone/{id}")
-    public long updatePetPhone(@PathVariable String id, @RequestBody String phone) {
-        return petRepo.updatePetBreed(id, phone);
+    @PatchMapping("/updatepet/breed/{id}")
+    public long updatePetBreed(@PathVariable String id, @RequestBody String breed) {
+        return petRepo.updatePetBreed(id, breed);
     }
 
     // update a pet's address

@@ -19,7 +19,7 @@ public interface PetRepository extends MongoRepository<Pet, String> {
 
 	@Query("{id:'?0'}")
 	@Update("{$set: {age:'?1'}}")
-	long updatePetAge(String id, String age);
+	long updatePetAge(String id, int age);
 
 	@Query("{id:'?0'}")
 	@Update("{$set: {breed:'?1'}}")
