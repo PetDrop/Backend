@@ -1,6 +1,7 @@
 package com.example.petdrop.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -78,20 +79,27 @@ public class AccountController {
     }
 
     // get account from db using its username
-    @GetMapping("/getaccountbyusername")
-    public Account getAccountByUsername(@RequestBody String username) {
+    @GetMapping("/getaccountbyusername/{username}")
+    public Account getAccountByUsername(@PathVariable String username) {
         return accountRepo.findAccountByUsername(username);
     }
 
     // get account from db using its email
-    @GetMapping("/getaccountbyemail")
-    public Account getAccountByEmail(@RequestBody String email) {
+    @GetMapping("/getaccountbyemail/{email}")
+    public Account getAccountByEmail(@PathVariable String email) {
         return accountRepo.findAccountByEmail(email);
     }
 
     // get account from db using its phone number
-    @GetMapping("/getaccountbyphone")
-    public Account getAccountByPhone(@RequestBody String phone) {
+    @GetMapping("/getaccountbyphone/{phone}")
+    public Account getAccountByPhone(@PathVariable String phone) {
         return accountRepo.findAccountByPhone(phone);
     }
+
+    // get account from db using its id
+    @GetMapping("/getaccountbyid/{id}")
+    public Optional<Account> getAccountById(@PathVariable String id) {
+        return accountRepo.findById(id);
+    }
+    
 }
