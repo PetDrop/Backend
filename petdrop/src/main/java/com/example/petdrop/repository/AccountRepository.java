@@ -40,6 +40,4 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	@Query("{id:'?0'}")
 	@Update("{$set: {emergencyContacts:'?1'}}")
 	long updateAccountEmergencyContacts(String id, String[] emergencyContacts);
-	
-	public long count();
 }
