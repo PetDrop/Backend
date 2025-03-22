@@ -2,6 +2,7 @@ package com.example.petdrop.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Document("reminder")
 public class Reminder {
@@ -9,7 +10,10 @@ public class Reminder {
     @Id
     private String id;
 
+    @DocumentReference(collection = "medication")
     private Medication medication;
+
+    @DocumentReference(collection = "pet")
     private Pet pet;
     
     public Reminder(String id, Medication medication, Pet pet) {

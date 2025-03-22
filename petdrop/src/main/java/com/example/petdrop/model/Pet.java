@@ -2,6 +2,7 @@ package com.example.petdrop.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Document("pet")
 public class Pet {
@@ -11,14 +12,16 @@ public class Pet {
 
     private String name;
     private String image;
-    private String age;
+    private int age;
     private String breed;
     private String address;
     private String vet;
     private String vetPhone;
+
+    @DocumentReference(collection = "medication")
     private Medication[] medications;
     
-    public Pet(String id, String name, String image, String age, String breed, String address, String vet, String vetPhone, Medication[] medications) {
+    public Pet(String id, String name, String image, int age, String breed, String address, String vet, String vetPhone, Medication[] medications) {
         super();
         this.id = id;
         this.name = name;
@@ -43,7 +46,7 @@ public class Pet {
         return image;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -79,7 +82,7 @@ public class Pet {
         this.image = image;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

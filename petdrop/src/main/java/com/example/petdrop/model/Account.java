@@ -2,6 +2,7 @@ package com.example.petdrop.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Document("account")
 public class Account {
@@ -15,8 +16,14 @@ public class Account {
     private String phone;
     private String address;
     private String[] emergencyContacts;
+
+    @DocumentReference(collection = "pet")
+    private Pet[] pets;
+
+    @DocumentReference(collection = "reminder")
+    private Reminder[] reminders;
     
-    public Account(String id, String username, String email, String password, String phone, String address, String[] emergencyContacts) {
+    public Account(String id, String username, String email, String password, String phone, String address, String[] emergencyContacts, Pet[] pets, Reminder[] reminders) {
         super();
         this.id = id;
         this.username = username;
@@ -25,6 +32,8 @@ public class Account {
         this.phone = phone;
         this.address = address;
         this.emergencyContacts = emergencyContacts;
+        this.pets = pets;
+        this.reminders = reminders;
     }
 
     public String getId() {
@@ -55,6 +64,14 @@ public class Account {
         return emergencyContacts;
     }
 
+    public Pet[] getPets() {
+        return pets;
+    }
+
+    public Reminder[] getReminders() {
+        return reminders;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -81,5 +98,13 @@ public class Account {
 
     public void setEmergencyContacts(String[] emergencyContacts) {
         this.emergencyContacts = emergencyContacts;
+    }
+
+    public void setPets(Pet[] pets) {
+        this.pets = pets;
+    }
+
+    public void setReminders(Reminder[] reminders) {
+        this.reminders = reminders;
     }
 }
