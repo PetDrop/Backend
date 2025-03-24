@@ -38,16 +38,22 @@ public class ReminderController {
         return ResponseEntity.ok(savedReminder);
     }
 
-    // update a reminder's username
+    // update a reminder's Medication
     @PatchMapping("/updatereminder/medication/{id}")
     public long updateReminderMedication(@PathVariable String id, @RequestBody Medication medication) {
         return reminderRepo.updateReminderMedication(id, medication);
     }
 
-    // update a reminder's email
+    // update a reminder's Pet
     @PatchMapping("/updatereminder/pet/{id}")
     public long updateReminderPet(@PathVariable String id, @RequestBody Pet pet) {
         return reminderRepo.updateReminderPet(id, pet);
+    }
+
+    // update a reminder's notifications
+    @PatchMapping("/updatereminder/notifications/{id}")
+    public long updateReminderNotifications(@PathVariable String id, @RequestBody String[] notifications) {
+        return reminderRepo.updateReminderNotifications(id, notifications);
     }
 
     // get all reminders from db

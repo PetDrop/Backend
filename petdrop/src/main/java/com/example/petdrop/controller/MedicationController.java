@@ -36,31 +36,31 @@ public class MedicationController {
         return ResponseEntity.ok(savedMedication);
     }
 
-    // update a medication's username
+    // update a medication's name
     @PatchMapping("/updatemedication/name/{id}")
     public long updateMedicationName(@PathVariable String id, @RequestBody String name) {
         return medicationRepo.updateMedicationName(id, name);
     }
 
-    // update a medication's email
+    // update a medication's color
     @PatchMapping("/updatemedication/color/{id}")
     public long updateMedicationColor(@PathVariable String id, @RequestBody String color) {
         return medicationRepo.updateMedicationColor(id, color);
     }
 
-    // update a medication's password
+    // update a medication's description
     @PatchMapping("/updatemedication/description/{id}")
     public long updateMedicationDescription(@PathVariable String id, @RequestBody String description) {
         return medicationRepo.updateMedicationDescription(id, description);
     }
 
-    // update a medication's phone number
+    // update a medication's dates
     @PatchMapping("/updatemedication/dates/{id}")
     public long updateMedicationDates(@PathVariable String id, @RequestBody String[] dates) {
         return medicationRepo.updateMedicationDates(id, dates);
     }
 
-    // update a medication's address
+    // update a medication's range
     @PatchMapping("/updatemedication/range/{id}")
     public long updateMedicationRange(@PathVariable String id, @RequestBody int range) {
         return medicationRepo.updateMedicationRange(id, range);

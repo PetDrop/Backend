@@ -15,12 +15,15 @@ public class Reminder {
 
     @DocumentReference(collection = "pet")
     private Pet pet;
+
+    private String[] notifications;
     
-    public Reminder(String id, Medication medication, Pet pet) {
+    public Reminder(String id, Medication medication, Pet pet, String[] notifications) {
         super();
         this.id = id;
         this.medication = medication;
         this.pet = pet;
+        this.notifications = notifications;
     }
 
     public String getId() {
@@ -35,6 +38,10 @@ public class Reminder {
         return pet;
     }
 
+    public String[] getNotifications() {
+        return notifications;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -45,5 +52,9 @@ public class Reminder {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public void setNotifications(String[] notifications) {
+        this.notifications = notifications;
     }
 }

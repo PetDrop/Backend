@@ -36,25 +36,25 @@ public class PetController {
         return ResponseEntity.ok(savedPet);
     }
 
-    // update a pet's username
+    // update a pet's name
     @PatchMapping("/updatepet/name/{id}")
     public long updatePetName(@PathVariable String id, @RequestBody String name) {
         return petRepo.updatePetName(id, name);
     }
 
-    // update a pet's email
+    // update a pet's image
     @PatchMapping("/updatepet/image/{id}")
     public long updatePetImage(@PathVariable String id, @RequestBody String image) {
         return petRepo.updatePetImage(id, image);
     }
 
-    // update a pet's password
+    // update a pet's age
     @PatchMapping("/updatepet/age/{id}")
     public long updatePetAge(@PathVariable String id, @RequestBody int age) {
         return petRepo.updatePetAge(id, age);
     }
 
-    // update a pet's phone number
+    // update a pet's breed
     @PatchMapping("/updatepet/breed/{id}")
     public long updatePetBreed(@PathVariable String id, @RequestBody String breed) {
         return petRepo.updatePetBreed(id, breed);

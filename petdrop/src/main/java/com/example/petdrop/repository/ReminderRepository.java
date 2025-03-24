@@ -17,4 +17,8 @@ public interface ReminderRepository extends MongoRepository<Reminder, String> {
 	@Query("{id:'?0'}")
 	@Update("{$set: {pet:'?1'}}")
 	long updateReminderPet(String id, Pet pet);
+
+	@Query("{id:'?0'}")
+	@Update("{$set: {notifications:'?1'}}")
+	long updateReminderNotifications(String id, String[] notifications);
 }
