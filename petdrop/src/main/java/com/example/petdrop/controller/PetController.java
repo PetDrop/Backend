@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.petdrop.model.Medication;
 import com.example.petdrop.model.Pet;
 import com.example.petdrop.repository.PetRepository;
 
@@ -64,6 +65,24 @@ public class PetController {
     @PatchMapping("/updatepet/address/{id}")
     public long updatePetAddress(@PathVariable String id, @RequestBody String address) {
         return petRepo.updatePetAddress(id, address);
+    }
+
+    // update a pet's vet
+    @PatchMapping("/updatepet/vet/{id}")
+    public long updatePetVet(@PathVariable String id, @RequestBody String vet) {
+        return petRepo.updatePetVet(id, vet);
+    }
+
+    // update a pet's vet's phone number
+    @PatchMapping("/updatepet/vetphone/{id}")
+    public long updatePetVetPhone(@PathVariable String id, @RequestBody String vetPhone) {
+        return petRepo.updatePetVetPhone(id, vetPhone);
+    }
+
+    // update a pet's Medications
+    @PatchMapping("/updatepet/medications/{id}")
+    public long updatePetAddress(@PathVariable String id, @RequestBody Medication[] medications) {
+        return petRepo.updatePetMedications(id, medications);
     }
 
     // get all pets from db

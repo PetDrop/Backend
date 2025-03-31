@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.Account;
+import com.example.petdrop.model.Pet;
+import com.example.petdrop.model.Reminder;
 import com.example.petdrop.repository.AccountRepository;
 
 @RestController
@@ -70,6 +72,18 @@ public class AccountController {
     @PatchMapping("/updateaccount/emergencycontacts/{id}")
     public long updateAccountEmergencyContacts(@PathVariable String id, @RequestBody String[] emergencyContacts) {
         return accountRepo.updateAccountEmergencyContacts(id, emergencyContacts);
+    }
+
+    // update an account's Pets
+    @PatchMapping("/updateaccount/pets/{id}")
+    public long updateAccountPets(@PathVariable String id, @RequestBody Pet[] pets) {
+        return accountRepo.updateAccountPets(id, pets);
+    }
+
+    // update an account's Reminders
+    @PatchMapping("/updateaccount/reminders/{id}")
+    public long updateAccountReminders(@PathVariable String id, @RequestBody Reminder[] reminders) {
+        return accountRepo.updateAccountReminders(id, reminders);
     }
     
     // get all accounts from db
