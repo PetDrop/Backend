@@ -16,9 +16,6 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	@Query("{username:'?0'}")
 	Account findAccountByUsername(String username);
 	
-	@Query("{phone:'?0'}")
-	Account findAccountByPhone(String phone);
-
 	@Query("{id:'?0'}")
 	@Update("{$set: {username:'?1'}}")
 	long updateAccountUsername(String id, String username);
@@ -32,16 +29,8 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	long updateAccountPassword(String id, String password);
 
 	@Query("{id:'?0'}")
-	@Update("{$set: {phone:'?1'}}")
-	long updateAccountPhone(String id, String phone);
-
-	@Query("{id:'?0'}")
-	@Update("{$set: {address:'?1'}}")
-	long updateAccountAddress(String id, String address);
-
-	@Query("{id:'?0'}")
-	@Update("{$set: {emergencyContacts:'?1'}}")
-	long updateAccountEmergencyContacts(String id, String[] emergencyContacts);
+	@Update("{$set: {sharedUsers:'?1'}}")
+	long updateAccountSharedUsers(String id, String[] sharedUsers);
 
 	@Query("{id:'?0'}")
 	@Update("{$set: {pets:'?1'}}")

@@ -56,22 +56,10 @@ public class AccountController {
         return accountRepo.updateAccountPassword(id, password);
     }
 
-    // update an account's phone number
-    @PatchMapping("/updateaccount/phone/{id}")
-    public long updateAccountPhone(@PathVariable String id, @RequestBody String phone) {
-        return accountRepo.updateAccountPhone(id, phone);
-    }
-
-    // update an account's address
-    @PatchMapping("/updateaccount/address/{id}")
-    public long updateAccountAddress(@PathVariable String id, @RequestBody String address) {
-        return accountRepo.updateAccountAddress(id, address);
-    }
-
-    // update an account's emergency contacts
-    @PatchMapping("/updateaccount/emergencycontacts/{id}")
-    public long updateAccountEmergencyContacts(@PathVariable String id, @RequestBody String[] emergencyContacts) {
-        return accountRepo.updateAccountEmergencyContacts(id, emergencyContacts);
+    // update an account's shared users
+    @PatchMapping("/updateaccount/sharedusers/{id}")
+    public long updateAccountSharedUsers(@PathVariable String id, @RequestBody String[] sharedUsers) {
+        return accountRepo.updateAccountSharedUsers(id, sharedUsers);
     }
 
     // update an account's Pets
@@ -102,12 +90,6 @@ public class AccountController {
     @GetMapping("/getaccountbyemail/{email}")
     public Account getAccountByEmail(@PathVariable String email) {
         return accountRepo.findAccountByEmail(email);
-    }
-
-    // get account from db using its phone number
-    @GetMapping("/getaccountbyphone/{phone}")
-    public Account getAccountByPhone(@PathVariable String phone) {
-        return accountRepo.findAccountByPhone(phone);
     }
 
     // get account from db using its id

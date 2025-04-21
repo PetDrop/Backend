@@ -13,9 +13,7 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private String phone;
-    private String address;
-    private String[] emergencyContacts;
+    private String[] sharedUsers;
 
     @DocumentReference(collection = "pet")
     private Pet[] pets;
@@ -23,15 +21,13 @@ public class Account {
     @DocumentReference(collection = "reminder")
     private Reminder[] reminders;
     
-    public Account(String id, String username, String email, String password, String phone, String address, String[] emergencyContacts, Pet[] pets, Reminder[] reminders) {
+    public Account(String id, String username, String email, String password, String[] sharedUsers, Pet[] pets, Reminder[] reminders) {
         super();
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.phone = phone;
-        this.address = address;
-        this.emergencyContacts = emergencyContacts;
+        this.sharedUsers = sharedUsers;
         this.pets = pets;
         this.reminders = reminders;
     }
@@ -52,16 +48,8 @@ public class Account {
         return password;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String[] getEmergencyContacts() {
-        return emergencyContacts;
+    public String[] getSharedUsers() {
+        return sharedUsers;
     }
 
     public Pet[] getPets() {
@@ -88,16 +76,8 @@ public class Account {
         this.password = password;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setEmergencyContacts(String[] emergencyContacts) {
-        this.emergencyContacts = emergencyContacts;
+    public void setSharedUsers(String[] sharedUsers) {
+        this.sharedUsers = sharedUsers;
     }
 
     public void setPets(Pet[] pets) {
