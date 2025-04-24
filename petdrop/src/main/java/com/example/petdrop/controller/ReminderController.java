@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.petdrop.model.Medication;
-import com.example.petdrop.model.Pet;
 import com.example.petdrop.model.Reminder;
 import com.example.petdrop.repository.ReminderRepository;
 
@@ -36,18 +34,6 @@ public class ReminderController {
     public ResponseEntity<Reminder> updateReminder(@RequestBody Reminder updatedReminder) {
         Reminder savedReminder = reminderRepo.save(updatedReminder);
         return ResponseEntity.ok(savedReminder);
-    }
-
-    // update a reminder's Medication
-    @PatchMapping("/updatereminder/medication/{id}")
-    public long updateReminderMedication(@PathVariable String id, @RequestBody Medication medication) {
-        return reminderRepo.updateReminderMedication(id, medication);
-    }
-
-    // update a reminder's Pet
-    @PatchMapping("/updatereminder/pet/{id}")
-    public long updateReminderPet(@PathVariable String id, @RequestBody Pet pet) {
-        return reminderRepo.updateReminderPet(id, pet);
     }
 
     // update a reminder's notifications

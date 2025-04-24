@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.Account;
 import com.example.petdrop.model.Pet;
-import com.example.petdrop.model.Reminder;
 import com.example.petdrop.repository.AccountRepository;
 
 @RestController
@@ -68,12 +67,6 @@ public class AccountController {
         return accountRepo.updateAccountPets(id, pets);
     }
 
-    // update an account's Reminders
-    @PatchMapping("/updateaccount/reminders/{id}")
-    public long updateAccountReminders(@PathVariable String id, @RequestBody Reminder[] reminders) {
-        return accountRepo.updateAccountReminders(id, reminders);
-    }
-    
     // get all accounts from db
     @GetMapping("/getallaccounts")
     public List<Account> getAllAccounts() {

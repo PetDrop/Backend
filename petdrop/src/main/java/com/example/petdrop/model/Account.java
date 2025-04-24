@@ -18,10 +18,7 @@ public class Account {
     @DocumentReference(collection = "pet")
     private Pet[] pets;
 
-    @DocumentReference(collection = "reminder")
-    private Reminder[] reminders;
-    
-    public Account(String id, String username, String email, String password, String[] sharedUsers, Pet[] pets, Reminder[] reminders) {
+    public Account(String id, String username, String email, String password, String[] sharedUsers, Pet[] pets) {
         super();
         this.id = id;
         this.username = username;
@@ -29,7 +26,6 @@ public class Account {
         this.password = password;
         this.sharedUsers = sharedUsers;
         this.pets = pets;
-        this.reminders = reminders;
     }
 
     public String getId() {
@@ -56,10 +52,6 @@ public class Account {
         return pets;
     }
 
-    public Reminder[] getReminders() {
-        return reminders;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -82,9 +74,5 @@ public class Account {
 
     public void setPets(Pet[] pets) {
         this.pets = pets;
-    }
-
-    public void setReminders(Reminder[] reminders) {
-        this.reminders = reminders;
     }
 }

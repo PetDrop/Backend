@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.Update;
 
 import com.example.petdrop.model.Account;
 import com.example.petdrop.model.Pet;
-import com.example.petdrop.model.Reminder;
 
 public interface AccountRepository extends MongoRepository<Account, String> {
 	
@@ -35,8 +34,4 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	@Query("{id:'?0'}")
 	@Update("{$set: {pets:'?1'}}")
 	long updateAccountPets(String id, Pet[] pets);
-
-	@Query("{id:'?0'}")
-	@Update("{$set: {reminders:'?1'}}")
-	long updateAccountReminders(String id, Reminder[] reminders);
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.Medication;
+import com.example.petdrop.model.Reminder;
 import com.example.petdrop.repository.MedicationRepository;
 
 @RestController
@@ -58,6 +59,12 @@ public class MedicationController {
     @PatchMapping("/updatemedication/dates/{id}")
     public long updateMedicationDates(@PathVariable String id, @RequestBody String[] dates) {
         return medicationRepo.updateMedicationDates(id, dates);
+    }
+
+    // update a medication's reminder
+    @PatchMapping("/updatemedication/reminder/{id}")
+    public long updateMedicationReminder(@PathVariable String id, @RequestBody Reminder reminder) {
+        return medicationRepo.updateMedicationReminder(id, reminder);
     }
 
     // update a medication's range
