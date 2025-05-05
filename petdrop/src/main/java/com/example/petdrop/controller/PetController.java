@@ -25,6 +25,7 @@ public class PetController {
     @Autowired 
     private PetRepository petRepo;
 
+    @Autowired
     private MedicationRepository medicationRepo;
     
     // save pet to db

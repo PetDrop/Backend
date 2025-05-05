@@ -21,12 +21,13 @@ import com.example.petdrop.repository.ReminderRepository;
 
 @RestController
 public class MedicationController {
-    
-    @Autowired 
+
+    @Autowired
     private MedicationRepository medicationRepo;
 
+    @Autowired
     private ReminderRepository reminderRepo;
-    
+
     // save medication to db
     @PostMapping("/addmedication")
     public Medication addMedication(@RequestBody Medication medication) {
@@ -80,7 +81,7 @@ public class MedicationController {
     // get all medications from db
     @GetMapping("/getallmedications")
     public List<Medication> getAllMedications() {
-        return medicationRepo.findAll(); 
+        return medicationRepo.findAll();
     }
 
     // get medication from db using its id
@@ -93,8 +94,10 @@ public class MedicationController {
     @DeleteMapping("/deletemedicationbyid/{id}")
     public void deleteMedicationById(@PathVariable String id) {
         // delete the med's reminder
-        reminderRepo.deleteById(getMedicationById(id).get().getReminder().getId());
+        if (getMedicationById(id).get().getReminder() != null) {
+            reminderRepo.deleteById(getMedicationById(id).get().getReminder().getId());
+        }
         medicationRepo.deleteById(id);
     }
-    
+
 }
