@@ -2,6 +2,7 @@ package com.example.petdrop.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Document("account")
 public class Account {
@@ -12,17 +13,23 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private String address;
-    private String[] emergencyContacts;
-    
-    public Account(String id, String username, String email, String password, String address, String[] emergencyContacts) {
+    private String[] sharedUsers;
+
+    @DocumentReference(collection = "pet")
+    private Pet[] pets;
+
+    public Account(String id, String username, String email, String password, String[] sharedUsers, Pet[] pets) {
         super();
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.address = address;
-        this.emergencyContacts = emergencyContacts;
+        this.sharedUsers = sharedUsers;
+        this.pets = pets;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -37,12 +44,16 @@ public class Account {
         return password;
     }
 
-    public String getAddress() {
-        return address;
+    public String[] getSharedUsers() {
+        return sharedUsers;
     }
 
-    public String[] getEmergencyContacts() {
-        return emergencyContacts;
+    public Pet[] getPets() {
+        return pets;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
@@ -57,11 +68,11 @@ public class Account {
         this.password = password;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setSharedUsers(String[] sharedUsers) {
+        this.sharedUsers = sharedUsers;
     }
 
-    public void setEmergencyContacts(String[] emergencyContacts) {
-        this.emergencyContacts = emergencyContacts;
+    public void setPets(Pet[] pets) {
+        this.pets = pets;
     }
 }
