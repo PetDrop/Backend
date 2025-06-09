@@ -13,14 +13,14 @@ public class Medication {
     private String name;
     private String color;
     private String description;
-    private String[] dates;
+    private DateObj[] dates;
 
     @DocumentReference(collection = "reminder")
     private Reminder reminder;
 
     private int range;
     
-    public Medication(String id, String name, String color, String description, String[] dates, Reminder reminder, int range) {
+    public Medication(String id, String name, String color, String description, DateObj[] dates, Reminder reminder, int range) {
         super();
         this.id = id;
         this.name = name;
@@ -47,7 +47,7 @@ public class Medication {
         return description;
     }
 
-    public String[] getDates() {
+    public DateObj[] getDates() {
         return dates;
     }
 
@@ -75,7 +75,7 @@ public class Medication {
         this.description = description;
     }
 
-    public void setDates(String[] dates) {
+    public void setDates(DateObj[] dates) {
         this.dates = dates;
     }
 
