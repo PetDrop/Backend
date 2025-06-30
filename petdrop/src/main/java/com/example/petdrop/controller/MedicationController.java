@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.example.petdrop.model.DateObj;
 import com.example.petdrop.model.Medication;
 import com.example.petdrop.model.Reminder;
 import com.example.petdrop.repository.MedicationRepository;
@@ -62,7 +63,7 @@ public class MedicationController {
 
     // update a medication's dates
     @PatchMapping("/updatemedication/dates/{id}")
-    public long updateMedicationDates(@PathVariable String id, @RequestBody String[] dates) {
+    public long updateMedicationDates(@PathVariable String id, @RequestBody DateObj[] dates) {
         return medicationRepo.updateMedicationDates(id, dates);
     }
 
