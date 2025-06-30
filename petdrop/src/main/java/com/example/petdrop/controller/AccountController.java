@@ -61,6 +61,12 @@ public class AccountController {
         return accountRepo.updateAccountSharedUsers(id, sharedUsers);
     }
 
+    // update an account's users they shared with
+    @PatchMapping("/updateaccount/userssharedwith/{id}")
+    public long updateAccountUsersSharedWith(@PathVariable String id, @RequestBody String[] usersSharedWith) {
+        return accountRepo.updateAccountUsersSharedWith(id, usersSharedWith);
+    }
+
     // update an account's Pets
     @PatchMapping("/updateaccount/pets/{id}")
     public long updateAccountPets(@PathVariable String id, @RequestBody Pet[] pets) {

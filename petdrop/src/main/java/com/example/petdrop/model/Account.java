@@ -13,18 +13,20 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private String[] sharedUsers;
+    private String[] sharedUsers; // users they request info from
+    private String[] usersSharedWith; // users they volunteer their info to
 
     @DocumentReference(collection = "pet")
     private Pet[] pets;
 
-    public Account(String id, String username, String email, String password, String[] sharedUsers, Pet[] pets) {
+    public Account(String id, String username, String email, String password, String[] sharedUsers, String[] usersSharedWith, Pet[] pets) {
         super();
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.sharedUsers = sharedUsers;
+        this.usersSharedWith = usersSharedWith;
         this.pets = pets;
     }
 
@@ -46,6 +48,10 @@ public class Account {
 
     public String[] getSharedUsers() {
         return sharedUsers;
+    }
+
+    public String[] getUsersSharedWith() {
+        return usersSharedWith;
     }
 
     public Pet[] getPets() {
@@ -70,6 +76,10 @@ public class Account {
 
     public void setSharedUsers(String[] sharedUsers) {
         this.sharedUsers = sharedUsers;
+    }
+
+    public void setUsersSharedWith(String[] usersSharedWith) {
+        this.usersSharedWith = usersSharedWith;
     }
 
     public void setPets(Pet[] pets) {
