@@ -38,6 +38,10 @@ public interface PetRepository extends MongoRepository<Pet, String> {
 	long updatePetVetPhone(String id, String vetPhone);
 
 	@Query("{id:'?0'}")
+	@Update("{$set: {editable:'?1'}}")
+	long updatePetEditable(String id, boolean editable);
+
+	@Query("{id:'?0'}")
 	@Update("{$set: {medications:'?1'}}")
 	long updatePetMedications(String id, Medication[] medications);
 }

@@ -17,11 +17,12 @@ public class Pet {
     private String address;
     private String vet;
     private String vetPhone;
+    private boolean editable;
 
     @DocumentReference(collection = "medication")
     private Medication[] medications;
     
-    public Pet(String id, String name, String image, int age, String breed, String address, String vet, String vetPhone, Medication[] medications) {
+    public Pet(String id, String name, String image, int age, String breed, String address, String vet, String vetPhone, boolean editable, Medication[] medications) {
         super();
         this.id = id;
         this.name = name;
@@ -31,6 +32,7 @@ public class Pet {
         this.address = address;
         this.vet = vet;
         this.vetPhone = vetPhone;
+        this.editable = editable;
         this.medications = medications;
     }
 
@@ -64,6 +66,10 @@ public class Pet {
 
     public String getVetPhone() {
         return vetPhone;
+    }
+
+    public boolean getEditable() {
+        return editable;
     }
 
     public Medication[] getMedications() {
@@ -100,6 +106,10 @@ public class Pet {
 
     public void setVetPhone(String vetPhone) {
         this.vetPhone = vetPhone;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public void setMedications(Medication[] medications) {
