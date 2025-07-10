@@ -32,6 +32,10 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	long updateAccountSharedUsers(String id, String[] sharedUsers);
 
 	@Query("{id:'?0'}")
+	@Update("{$set: {usersSharedWith:'?1'}}")
+	long updateAccountUsersSharedWith(String id, String[] usersSharedWith);
+
+	@Query("{id:'?0'}")
 	@Update("{$set: {pets:'?1'}}")
 	long updateAccountPets(String id, Pet[] pets);
 }

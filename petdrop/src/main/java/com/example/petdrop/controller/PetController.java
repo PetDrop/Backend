@@ -84,6 +84,12 @@ public class PetController {
         return petRepo.updatePetVetPhone(id, vetPhone);
     }
 
+    // update whether or not a pet is editable
+    @PatchMapping("/updatepet/editable/{id}")
+    public long updatePetEditable(@PathVariable String id, @RequestBody boolean editable) {
+        return petRepo.updatePetEditable(id, editable);
+    }
+
     // update a pet's Medications
     @PatchMapping("/updatepet/medications/{id}")
     public long updatePetAddress(@PathVariable String id, @RequestBody Medication[] medications) {
