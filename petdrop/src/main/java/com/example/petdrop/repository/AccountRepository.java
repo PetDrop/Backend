@@ -1,5 +1,7 @@
 package com.example.petdrop.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Update;
@@ -10,10 +12,10 @@ import com.example.petdrop.model.Pet;
 public interface AccountRepository extends MongoRepository<Account, String> {
 	
 	@Query("{email:'?0'}")
-	Account findAccountByEmail(String email);
+	Optional<Account> findAccountByEmail(String email);
 	
 	@Query("{username:'?0'}")
-	Account findAccountByUsername(String username);
+	Optional<Account> findAccountByUsername(String username);
 	
 	@Query("{id:'?0'}")
 	@Update("{$set: {username:'?1'}}")

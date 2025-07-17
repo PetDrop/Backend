@@ -81,13 +81,13 @@ public class AccountController {
 
     // get account from db using its username
     @GetMapping("/getaccountbyusername/{username}")
-    public Account getAccountByUsername(@PathVariable String username) {
+    public Optional<Account> getAccountByUsername(@PathVariable String username) {
         return accountRepo.findAccountByUsername(username);
     }
 
     // get account from db using its email
     @GetMapping("/getaccountbyemail/{email}")
-    public Account getAccountByEmail(@PathVariable String email) {
+    public Optional<Account> getAccountByEmail(@PathVariable String email) {
         return accountRepo.findAccountByEmail(email);
     }
 
