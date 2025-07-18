@@ -3,7 +3,7 @@ package com.example.petdrop.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("medication")
+@Document("sponsor_medication")
 public class SponsorMedication {
 
     @Id

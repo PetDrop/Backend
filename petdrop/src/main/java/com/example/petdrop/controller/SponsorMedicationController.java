@@ -67,15 +67,15 @@ public class SponsorMedicationController {
         return sponsorMedicationRepo.findById(id);
     }
 
+    // get sponsor medication from db using its name
+    @GetMapping("/getsponsormedicationbyname/{name}")
+    public Optional<SponsorMedication> getSponsorMedicationByName(@PathVariable String name) {
+        return sponsorMedicationRepo.findByName(name);
+    }
+
     // delete sponsor medication from db using its id
     @DeleteMapping("/deletesponsormedicationbyid/{id}")
     public void deleteSponsorMedicationById(@PathVariable String id) {
         sponsorMedicationRepo.deleteById(id);
-    }
-
-    // get sponsor medication from db using its name
-    @GetMapping("/getsponsormedicationbyid/{name}")
-    public Optional<SponsorMedication> getSponsorMedicationByName(@PathVariable String name) {
-        return sponsorMedicationRepo.findByName(name);
     }
 }
