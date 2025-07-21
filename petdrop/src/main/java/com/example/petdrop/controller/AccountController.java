@@ -73,6 +73,12 @@ public class AccountController {
         return accountRepo.updateAccountPets(id, pets);
     }
 
+    // update an account's image
+    @PatchMapping("/updateaccount/image/{id}")
+    public long updateAccountImage(@PathVariable String id, @RequestBody String image) {
+        return accountRepo.updateAccountImage(id, image);
+    }
+
     // get all accounts from db
     @GetMapping("/getallaccounts")
     public List<Account> getAllAccounts() {
@@ -81,13 +87,13 @@ public class AccountController {
 
     // get account from db using its username
     @GetMapping("/getaccountbyusername/{username}")
-    public Account getAccountByUsername(@PathVariable String username) {
+    public Optional<Account> getAccountByUsername(@PathVariable String username) {
         return accountRepo.findAccountByUsername(username);
     }
 
     // get account from db using its email
     @GetMapping("/getaccountbyemail/{email}")
-    public Account getAccountByEmail(@PathVariable String email) {
+    public Optional<Account> getAccountByEmail(@PathVariable String email) {
         return accountRepo.findAccountByEmail(email);
     }
 
