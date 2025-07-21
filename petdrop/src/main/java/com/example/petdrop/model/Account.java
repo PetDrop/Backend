@@ -15,11 +15,12 @@ public class Account {
     private String password;
     private String[] sharedUsers; // users they request info from
     private String[] usersSharedWith; // users they volunteer their info to
+    private String image; // profile picture
 
     @DocumentReference(collection = "pet")
     private Pet[] pets;
 
-    public Account(String id, String username, String email, String password, String[] sharedUsers, String[] usersSharedWith, Pet[] pets) {
+    public Account(String id, String username, String email, String password, String[] sharedUsers, String[] usersSharedWith, Pet[] pets, String image) {
         super();
         this.id = id;
         this.username = username;
@@ -28,6 +29,7 @@ public class Account {
         this.sharedUsers = sharedUsers;
         this.usersSharedWith = usersSharedWith;
         this.pets = pets;
+        this.image = image;
     }
 
     public String getId() {
@@ -58,6 +60,10 @@ public class Account {
         return pets;
     }
 
+    public String getImage() {
+        return image;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -84,5 +90,9 @@ public class Account {
 
     public void setPets(Pet[] pets) {
         this.pets = pets;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

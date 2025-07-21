@@ -73,6 +73,12 @@ public class AccountController {
         return accountRepo.updateAccountPets(id, pets);
     }
 
+    // update an account's image
+    @PatchMapping("/updateaccount/image/{id}")
+    public long updateAccountImage(@PathVariable String id, @RequestBody String image) {
+        return accountRepo.updateAccountImage(id, image);
+    }
+
     // get all accounts from db
     @GetMapping("/getallaccounts")
     public List<Account> getAllAccounts() {

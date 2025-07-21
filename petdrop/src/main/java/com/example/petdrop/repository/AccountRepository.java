@@ -40,4 +40,8 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	@Query("{id:'?0'}")
 	@Update("{$set: {pets:'?1'}}")
 	long updateAccountPets(String id, Pet[] pets);
+
+	@Query("{id:'?0'}")
+	@Update("{$set: {image:'?1'}}")
+	long updateAccountImage(String id, String image);
 }
