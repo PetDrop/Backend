@@ -1,2 +1,2 @@
 # Backend
-The backend of the app
+The backend consists of a SpringBoot server and a MongoDB database
