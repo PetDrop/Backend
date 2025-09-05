@@ -18,7 +18,6 @@ public class NotificationController {
 
     @PostMapping("/schedulenotification")
     public Notification create(@RequestBody Notification notification) {
-        notification.setActive(true);
         return repo.save(notification);
     }
 

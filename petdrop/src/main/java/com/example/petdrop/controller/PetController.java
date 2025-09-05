@@ -114,7 +114,7 @@ public class PetController {
         // delete all of the pet's meds
         Medication[] meds = getPetById(id).get().getMedications();
         for (int i = 0; i < meds.length; i++) {
-            medicationRepo.deleteById(meds[i].getId());
+            medicationRepo.delete(meds[i]);
         }
         petRepo.deleteById(id);
     }

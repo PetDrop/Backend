@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.DateObj;
 import com.example.petdrop.model.Medication;
-import com.example.petdrop.model.Reminder;
+import com.example.petdrop.model.Notification;
 import com.example.petdrop.repository.MedicationRepository;
-import com.example.petdrop.repository.ReminderRepository;
+import com.example.petdrop.repository.NotificationRepository;
 
 @RestController
 public class MedicationController {
@@ -27,7 +27,7 @@ public class MedicationController {
     private MedicationRepository medicationRepo;
 
     @Autowired
-    private ReminderRepository reminderRepo;
+    private NotificationRepository notificationRepo;
 
     // save medication to db
     @PostMapping("/addmedication")
@@ -67,10 +67,10 @@ public class MedicationController {
         return medicationRepo.updateMedicationDates(id, dates);
     }
 
-    // update a medication's reminder
-    @PatchMapping("/updatemedication/reminder/{id}")
-    public long updateMedicationReminder(@PathVariable String id, @RequestBody Reminder reminder) {
-        return medicationRepo.updateMedicationReminder(id, reminder);
+    // update a medication's notifications
+    @PatchMapping("/updatemedication/notifications/{id}")
+    public long updateMedicationNotifications(@PathVariable String id, @RequestBody Notification[] notifications) {
+        return medicationRepo.updateMedicationNotifications(id, notifications);
     }
 
     // update a medication's range
@@ -94,9 +94,12 @@ public class MedicationController {
     // delete medication from db using its id
     @DeleteMapping("/deletemedicationbyid/{id}")
     public void deleteMedicationById(@PathVariable String id) {
-        // delete the med's reminder
-        if (getMedicationById(id).get().getReminder() != null) {
-            reminderRepo.deleteById(getMedicationById(id).get().getReminder().getId());
+        // delete the med's notifications
+        Notification[] notifications = getMedicationById(id).get().getNotifications();
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                notificationRepo.delete(notification);
+            }
         }
         medicationRepo.deleteById(id);
     }

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "notifications")
+@Document(collection = "notification")
 public class Notification {
     @Id
     private String id;
