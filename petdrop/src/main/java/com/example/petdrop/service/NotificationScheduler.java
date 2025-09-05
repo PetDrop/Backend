@@ -38,7 +38,8 @@ public class NotificationScheduler {
                     n.setRemainingRepeats(n.getRemainingRepeats() - 1);
                 }
             } else {
-                n.setActive(false);
+                repo.delete(n);
+                dueNotifs.remove(n);
             }
         }
         repo.saveAll(dueNotifs);
