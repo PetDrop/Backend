@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.Reminder;
 
-public interface NotificationRepository extends MongoRepository<Notification, String> {
+public interface ReminderRepository extends MongoRepository<Reminder, String> {
     @Query("{ 'active': true, 'nextRun': { $lt: ?0 } }")
-    List<Notification> findDueNotifications(LocalDateTime time);
+    List<Reminder> findDueReminders(LocalDateTime time);
 }
 

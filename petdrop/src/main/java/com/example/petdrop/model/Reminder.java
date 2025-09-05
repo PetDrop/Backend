@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "notification")
-public class Notification {
+@Document(collection = "reminder")
+public class Reminder {
     @Id
     private String id;
 
@@ -23,7 +23,7 @@ public class Notification {
 
     private boolean active;
 
-    public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
+    public Reminder(String id, String expoPushToken, String title, String body, Map<String, Object> data,
             LocalDateTime nextRun, Duration repeatInterval, Integer remainingRepeats, boolean active) {
         this.id = id;
         this.expoPushToken = expoPushToken;

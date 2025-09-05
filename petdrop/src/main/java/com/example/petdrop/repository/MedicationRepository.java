@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.Update;
 
 import com.example.petdrop.model.DateObj;
 import com.example.petdrop.model.Medication;
-import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.Reminder;
 
 public interface MedicationRepository extends MongoRepository<Medication, String> {
 	
@@ -27,8 +27,8 @@ public interface MedicationRepository extends MongoRepository<Medication, String
 	long updateMedicationDates(String id, DateObj[] dates);
 
 	@Query("{id:'?0'}")
-	@Update("{$set: {notifications:'?1'}}")
-	long updateMedicationNotifications(String id, Notification[] notifications);
+	@Update("{$set: {reminders:'?1'}}")
+	long updateMedicationReminders(String id, Reminder[] reminders);
 
 	@Query("{id:'?0'}")
 	@Update("{$set: {range:'?1'}}")

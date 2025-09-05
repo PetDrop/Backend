@@ -7,22 +7,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.petdrop.model.Notification;
-import com.example.petdrop.repository.NotificationRepository;
+import com.example.petdrop.model.Reminder;
+import com.example.petdrop.repository.ReminderRepository;
 
 @RestController
-public class NotificationController {
+public class ReminderController {
 
     @Autowired
-    private NotificationRepository repo;
+    private ReminderRepository repo;
 
-    @PostMapping("/schedulenotification")
-    public Notification create(@RequestBody Notification notification) {
-        return repo.save(notification);
+    @PostMapping("/addreminder")
+    public Reminder addReminder(@RequestBody Reminder reminder) {
+        return repo.save(reminder);
     }
 
-    @DeleteMapping("/cancelnotification/{id}")
-    public void cancel(@PathVariable String id) {
+    @DeleteMapping("/deletereminder/{id}")
+    public void deleteReminder(@PathVariable String id) {
         repo.findById(id).ifPresent(n -> {
             repo.delete(n);
         });
