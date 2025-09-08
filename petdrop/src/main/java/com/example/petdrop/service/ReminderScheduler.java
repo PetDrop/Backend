@@ -32,11 +32,8 @@ public class ReminderScheduler {
 
         // update scheduling info
         for (Reminder n : dueNotifs) {
-            if (n.getRepeatInterval() != null && (n.getRemainingRepeats() == null || n.getRemainingRepeats() > 1)) {
+            if (n.getRepeatInterval() != null && (n.getNextRun().isBefore(n.getLastRun()))) {
                 n.setNextRun(n.getNextRun().plus(n.getRepeatInterval()));
-                if (n.getRemainingRepeats() != null) {
-                    n.setRemainingRepeats(n.getRemainingRepeats() - 1);
-                }
             } else {
                 repo.delete(n);
                 dueNotifs.remove(n);
