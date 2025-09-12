@@ -1,6 +1,6 @@
 package com.example.petdrop.repository;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -10,6 +10,6 @@ import com.example.petdrop.model.Reminder;
 
 public interface ReminderRepository extends MongoRepository<Reminder, String> {
     @Query("{ 'active': true, 'nextRun': { $lt: ?0 } }")
-    List<Reminder> findDueReminders(LocalDateTime time);
+    List<Reminder> findDueReminders(ZonedDateTime time);
 }
 

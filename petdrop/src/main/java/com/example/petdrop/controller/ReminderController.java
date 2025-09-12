@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.petdrop.model.Reminder;
+import com.example.petdrop.model.ReminderRequest;
 import com.example.petdrop.repository.ReminderRepository;
 
 @RestController
@@ -17,8 +18,8 @@ public class ReminderController {
     private ReminderRepository repo;
 
     @PostMapping("/addreminder")
-    public Reminder addReminder(@RequestBody Reminder reminder) {
-        return repo.save(reminder);
+    public Reminder addReminder(@RequestBody ReminderRequest reminderRequest) {
+        return repo.save(new Reminder(reminderRequest));
     }
 
     @DeleteMapping("/deletereminder/{id}")

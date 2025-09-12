@@ -1,6 +1,6 @@
 package com.example.petdrop.service;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +22,7 @@ public class ReminderScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void processReminders() {
-        List<Reminder> dueNotifs = repo.findDueReminders(LocalDateTime.now());
+        List<Reminder> dueNotifs = repo.findDueReminders(ZonedDateTime.now());
         if (dueNotifs.isEmpty()) {
             return;
         }
@@ -32,8 +32,8 @@ public class ReminderScheduler {
 
         // update scheduling info
         for (Reminder n : dueNotifs) {
-            if (n.getRepeatInterval() != null && (n.getNextRun().isBefore(n.getLastRun()))) {
-                n.setNextRun(n.getNextRun().plus(n.getRepeatInterval()));
+            if (n.getRepeatInterval() != 0 && (n.getNextRun().isBefore(n.getFinalRun()))) {
+                n.setNextRun(n.getNextRun().plusMinutes(n.getRepeatInterval()));
             } else {
                 repo.delete(n);
                 dueNotifs.remove(n);

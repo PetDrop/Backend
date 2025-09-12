@@ -1,7 +1,8 @@
 package com.example.petdrop.model;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -17,23 +18,31 @@ public class Reminder {
     private String body;
     private Map<String, Object> data;
 
-    private LocalDateTime nextRun; // when to send next
-    private LocalDateTime lastRun; // when to send last
-    private Duration repeatInterval; // null if one-time
-
-    private boolean active;
+    private ZonedDateTime nextRun; // when to send next
+    private ZonedDateTime finalRun; // when to send last
+    private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
 
     public Reminder(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-            LocalDateTime nextRun, LocalDateTime lastRun, Duration repeatInterval, boolean active) {
+            ZonedDateTime nextRun, ZonedDateTime lastRun, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
         this.body = body;
         this.data = data;
         this.nextRun = nextRun;
-        this.lastRun = lastRun;
+        this.finalRun = lastRun;
         this.repeatInterval = repeatInterval;
-        this.active = active;
+    }
+
+    public Reminder(ReminderRequest reminderRequest) {
+        this.id = reminderRequest.getId();
+        this.expoPushToken = reminderRequest.getExpoPushToken();
+        this.title = reminderRequest.getTitle();
+        this.body = reminderRequest.getBody();
+        this.data = reminderRequest.getData();
+        this.nextRun = Instant.parse(reminderRequest.getNextLocalRun()).atZone(ZoneId.of(reminderRequest.getZoneId()));
+        this.finalRun = Instant.parse(reminderRequest.getFinalLocalRun()).atZone(ZoneId.of(reminderRequest.getZoneId()));
+        this.repeatInterval = reminderRequest.getRepeatInterval();
     }
 
     public String getId() {
@@ -76,35 +85,27 @@ public class Reminder {
         this.data = data;
     }
 
-    public LocalDateTime getNextRun() {
+    public ZonedDateTime getNextRun() {
         return nextRun;
     }
 
-    public void setNextRun(LocalDateTime nextRun) {
+    public void setNextRun(ZonedDateTime nextRun) {
         this.nextRun = nextRun;
     }
 
-    public LocalDateTime getLastRun() {
-        return lastRun;
+    public ZonedDateTime getFinalRun() {
+        return finalRun;
     }
 
-    public void setLastRun(LocalDateTime lastRun) {
-        this.lastRun = lastRun;
+    public void setFinalRun(ZonedDateTime finalRun) {
+        this.finalRun = finalRun;
     }
 
-    public Duration getRepeatInterval() {
+    public long getRepeatInterval() {
         return repeatInterval;
     }
 
-    public void setRepeatInterval(Duration repeatInterval) {
+    public void setRepeatInterval(long repeatInterval) {
         this.repeatInterval = repeatInterval;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }
