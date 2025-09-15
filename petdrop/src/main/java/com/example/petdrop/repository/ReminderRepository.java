@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.Query;
 import com.example.petdrop.model.Reminder;
 
 public interface ReminderRepository extends MongoRepository<Reminder, String> {
-    @Query("{ 'active': true, 'nextRun': { $lt: ?0 } }")
+    @Query("{ 'nextRuns': { $lt: ?0 } }")
     List<Reminder> findDueReminders(ZonedDateTime time);
 }
 

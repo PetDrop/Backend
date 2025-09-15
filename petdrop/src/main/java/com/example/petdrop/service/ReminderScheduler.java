@@ -1,6 +1,7 @@
 package com.example.petdrop.service;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +23,8 @@ public class ReminderScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void processReminders() {
-        List<Reminder> dueNotifs = repo.findDueReminders(ZonedDateTime.now());
+        ZonedDateTime curTime = ZonedDateTime.now();
+        List<Reminder> dueNotifs = repo.findDueReminders(curTime);
         if (dueNotifs.isEmpty()) {
             return;
         }
@@ -30,16 +32,33 @@ public class ReminderScheduler {
         // send all due reminders in chunks
         expoPushService.sendPushBatch(dueNotifs);
 
+        List<Reminder> toDelete = new ArrayList<>();
+        List<Reminder> toUpdate = new ArrayList<>();
+
         // update scheduling info
         for (Reminder n : dueNotifs) {
-            if (n.getRepeatInterval() != 0 && (n.getNextRun().isBefore(n.getFinalRun()))) {
-                n.setNextRun(n.getNextRun().plusMinutes(n.getRepeatInterval()));
+            if (n.getRepeatInterval() != 0) {
+                ZonedDateTime[] nextRuns = n.getNextRuns();
+                for (int i = 0; i < nextRuns.length; i++) {
+                    if (nextRuns[i].isBefore(curTime)) {
+                        if (nextRuns[i].isBefore(n.getFinalRuns()[i])) {
+                            nextRuns[i] = nextRuns[i].plusMinutes(n.getRepeatInterval());
+                            n.setNextRuns(nextRuns);
+                        }
+                        break;
+                    }
+                }
+                toUpdate.add(n);
             } else {
-                repo.delete(n);
-                dueNotifs.remove(n);
+                toDelete.add(n);
             }
         }
-        repo.saveAll(dueNotifs);
+        if (!toDelete.isEmpty()) {
+            repo.deleteAll(toDelete);
+        }
+        if (!toUpdate.isEmpty()) {
+            repo.saveAll(toUpdate);
+        }
     }
 
 }
