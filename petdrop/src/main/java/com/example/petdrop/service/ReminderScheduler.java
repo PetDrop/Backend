@@ -37,6 +37,7 @@ public class ReminderScheduler {
 
         // update scheduling info
         for (Reminder n : dueNotifs) {
+            boolean notifToBeDeleted = true;
             if (n.getRepeatInterval() != 0) {
                 ZonedDateTime[] nextRuns = n.getNextRuns();
                 for (int i = 0; i < nextRuns.length; i++) {
@@ -44,20 +45,23 @@ public class ReminderScheduler {
                         if (nextRuns[i].isBefore(n.getFinalRuns()[i])) {
                             nextRuns[i] = nextRuns[i].plusMinutes(n.getRepeatInterval());
                             n.setNextRuns(nextRuns);
+                            notifToBeDeleted = false;
                         }
                         break;
                     }
                 }
-                toUpdate.add(n);
-            } else {
+            }
+            if (notifToBeDeleted) {
                 toDelete.add(n);
+            } else {
+                toUpdate.add(n);
             }
         }
         if (!toDelete.isEmpty()) {
-            repo.deleteAll(toDelete);
+        repo.deleteAll(toDelete);
         }
         if (!toUpdate.isEmpty()) {
-            repo.saveAll(toUpdate);
+        repo.saveAll(toUpdate);
         }
     }
 

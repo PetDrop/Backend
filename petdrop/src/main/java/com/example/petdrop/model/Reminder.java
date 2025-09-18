@@ -1,7 +1,5 @@
 package com.example.petdrop.model;
 
-import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -22,6 +20,10 @@ public class Reminder {
     private ZonedDateTime[] finalRuns; // when to send last
     private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
 
+    public Reminder() {
+        super();
+    }
+
     public Reminder(String id, String expoPushToken, String title, String body, Map<String, Object> data,
             ZonedDateTime[] nextRuns, ZonedDateTime[] lastRuns, long repeatInterval) {
         this.id = id;
@@ -34,14 +36,14 @@ public class Reminder {
         this.repeatInterval = repeatInterval;
     }
 
-    public Reminder(ReminderRequest reminderRequest) {
+    public Reminder(ReminderRequest reminderRequest, ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns) {
         this.id = reminderRequest.getId();
         this.expoPushToken = reminderRequest.getExpoPushToken();
         this.title = reminderRequest.getTitle();
         this.body = reminderRequest.getBody();
         this.data = reminderRequest.getData();
-        // this.nextRuns = Instant.parse(reminderRequest.getNextLocalRun()).atZone(ZoneId.of(reminderRequest.getZoneId()));
-        // this.finalRuns = Instant.parse(reminderRequest.getFinalLocalRun()).atZone(ZoneId.of(reminderRequest.getZoneId()));
+        this.nextRuns = nextRuns;
+        this.finalRuns = finalRuns;
         this.repeatInterval = reminderRequest.getRepeatInterval();
     }
 

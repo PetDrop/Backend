@@ -10,20 +10,20 @@ public class ReminderRequest {
     private String body;
     private Map<String, Object> data;
 
-    private String nextLocalRun;
-    private String finalLocalRun;
+    private String[] nextLocalRuns;
+    private String[] finalLocalRuns;
     private String zoneId;
     private long repeatInterval;
 
     public ReminderRequest(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-            String nextLocalRun, String finalLocalRun, String zoneId, long repeatInterval) {
+            String[] nextLocalRuns, String[] finalLocalRuns, String zoneId, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
         this.body = body;
         this.data = data;
-        this.nextLocalRun = nextLocalRun;
-        this.finalLocalRun = finalLocalRun;
+        this.nextLocalRuns = nextLocalRuns;
+        this.finalLocalRuns = finalLocalRuns;
         this.zoneId = zoneId;
         this.repeatInterval = repeatInterval;
     }
@@ -68,20 +68,20 @@ public class ReminderRequest {
         this.data = data;
     }
 
-    public String getNextLocalRun() {
-        return nextLocalRun;
+    public String[] getNextLocalRuns() {
+        return nextLocalRuns;
     }
 
-    public void setNextLocalRun(String nextLocalRun) {
-        this.nextLocalRun = nextLocalRun;
+    public void setNextLocalRuns(String[] nextLocalRuns) {
+        this.nextLocalRuns = nextLocalRuns;
     }
 
-    public String getFinalLocalRun() {
-        return finalLocalRun;
+    public String[] getFinalLocalRuns() {
+        return finalLocalRuns;
     }
 
-    public void setFinalLocalRun(String finalLocalRun) {
-        this.finalLocalRun = finalLocalRun;
+    public void setFinalLocalRuns(String[] finalLocalRuns) {
+        this.finalLocalRuns = finalLocalRuns;
     }
 
     public String getZoneId() {
