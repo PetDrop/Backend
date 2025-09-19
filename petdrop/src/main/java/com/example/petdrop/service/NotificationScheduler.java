@@ -7,36 +7,36 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.example.petdrop.model.Reminder;
-import com.example.petdrop.repository.ReminderRepository;
+import com.example.petdrop.model.Notification;
+import com.example.petdrop.repository.NotificationRepository;
 
 @Service
-public class ReminderScheduler {
+public class NotificationScheduler {
 
-    private final ReminderRepository repo;
+    private final NotificationRepository repo;
     private final ExpoPushService expoPushService;
 
-    public ReminderScheduler(ReminderRepository repo, ExpoPushService expoPushService) {
+    public NotificationScheduler(NotificationRepository repo, ExpoPushService expoPushService) {
         this.repo = repo;
         this.expoPushService = expoPushService;
     }
 
     @Scheduled(fixedRate = 60000)
-    public void processReminders() {
+    public void processNotifications() {
         ZonedDateTime curTime = ZonedDateTime.now();
-        List<Reminder> dueNotifs = repo.findDueReminders(curTime);
+        List<Notification> dueNotifs = repo.findDueNotifications(curTime);
         if (dueNotifs.isEmpty()) {
             return;
         }
 
-        // send all due reminders in chunks
+        // send all due notifications in chunks
         expoPushService.sendPushBatch(dueNotifs);
 
-        List<Reminder> toDelete = new ArrayList<>();
-        List<Reminder> toUpdate = new ArrayList<>();
+        List<Notification> toDelete = new ArrayList<>();
+        List<Notification> toUpdate = new ArrayList<>();
 
         // update scheduling info
-        for (Reminder n : dueNotifs) {
+        for (Notification n : dueNotifs) {
             boolean notifToBeDeleted = true;
             if (n.getRepeatInterval() != 0) {
                 ZonedDateTime[] nextRuns = n.getNextRuns();

@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "reminder")
-public class Reminder {
+@Document(collection = "notification")
+public class Notification {
     @Id
     private String id;
 
@@ -20,11 +20,11 @@ public class Reminder {
     private ZonedDateTime[] finalRuns; // when to send last
     private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
 
-    public Reminder() {
+    public Notification() {
         super();
     }
 
-    public Reminder(String id, String expoPushToken, String title, String body, Map<String, Object> data,
+    public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
             ZonedDateTime[] nextRuns, ZonedDateTime[] lastRuns, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
@@ -36,15 +36,15 @@ public class Reminder {
         this.repeatInterval = repeatInterval;
     }
 
-    public Reminder(ReminderRequest reminderRequest, ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns) {
-        this.id = reminderRequest.getId();
-        this.expoPushToken = reminderRequest.getExpoPushToken();
-        this.title = reminderRequest.getTitle();
-        this.body = reminderRequest.getBody();
-        this.data = reminderRequest.getData();
+    public Notification(NotificationRequest notificationRequest, ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns) {
+        this.id = notificationRequest.getId();
+        this.expoPushToken = notificationRequest.getExpoPushToken();
+        this.title = notificationRequest.getTitle();
+        this.body = notificationRequest.getBody();
+        this.data = notificationRequest.getData();
         this.nextRuns = nextRuns;
         this.finalRuns = finalRuns;
-        this.repeatInterval = reminderRequest.getRepeatInterval();
+        this.repeatInterval = notificationRequest.getRepeatInterval();
     }
 
     public String getId() {

@@ -2,7 +2,7 @@ package com.example.petdrop.model;
 
 import java.util.Map;
 
-public class ReminderRequest {
+public class NotificationRequest {
     private String id;
 
     private String expoPushToken;
@@ -15,7 +15,7 @@ public class ReminderRequest {
     private String zoneId;
     private long repeatInterval;
 
-    public ReminderRequest(String id, String expoPushToken, String title, String body, Map<String, Object> data,
+    public NotificationRequest(String id, String expoPushToken, String title, String body, Map<String, Object> data,
             String[] nextLocalRuns, String[] finalLocalRuns, String zoneId, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;

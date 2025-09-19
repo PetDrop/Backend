@@ -15,19 +15,19 @@ public class Medication {
     private String description;
     private DateObj[] dates;
 
-    @DocumentReference(collection = "reminders")
-    private Reminder[] reminders;
+    @DocumentReference(collection = "notifications")
+    private Notification[] notifications;
 
     private int range;
     
-    public Medication(String id, String name, String color, String description, DateObj[] dates, Reminder[] reminders, int range) {
+    public Medication(String id, String name, String color, String description, DateObj[] dates, Notification[] notifications, int range) {
         super();
         this.id = id;
         this.name = name;
         this.color = color;
         this.description = description;
         this.dates = dates;
-        this.reminders = reminders;
+        this.notifications = notifications;
         this.range = range;
     }
 
@@ -51,8 +51,8 @@ public class Medication {
         return dates;
     }
 
-    public Reminder[] getReminders() {
-        return reminders;
+    public Notification[] getNotifications() {
+        return notifications;
     }
 
     public int getRange() {
@@ -79,8 +79,8 @@ public class Medication {
         this.dates = dates;
     }
 
-    public void setReminders(Reminder[] reminders) {
-        this.reminders = reminders;
+    public void setNotifications(Notification[] notifications) {
+        this.notifications = notifications;
     }
 
     public void setRange(int range) {

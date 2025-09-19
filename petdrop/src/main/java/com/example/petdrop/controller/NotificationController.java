@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.petdrop.model.Reminder;
-import com.example.petdrop.model.ReminderRequest;
-import com.example.petdrop.repository.ReminderRepository;
+import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.NotificationRequest;
+import com.example.petdrop.repository.NotificationRepository;
 
 @RestController
-public class ReminderController {
+public class NotificationController {
 
     @Autowired
-    private ReminderRepository repo;
+    private NotificationRepository repo;
 
-    @PostMapping("/addreminder")
-    public Reminder addReminder(@RequestBody ReminderRequest reminderRequest) {
+    @PostMapping("/addnotification")
+    public Notification addNotification(@RequestBody NotificationRequest notificationRequest) {
         // store repeated fields to be concise and efficient
-        String[] nextLocalRuns = reminderRequest.getNextLocalRuns();
-        String[] finalLocalRuns = reminderRequest.getFinalLocalRuns();
-        String zoneId = reminderRequest.getZoneId();
+        String[] nextLocalRuns = notificationRequest.getNextLocalRuns();
+        String[] finalLocalRuns = notificationRequest.getFinalLocalRuns();
+        String zoneId = notificationRequest.getZoneId();
 
         // instantiate arrays to be populated
         ZonedDateTime[] nextRuns = new ZonedDateTime[nextLocalRuns.length];
@@ -38,12 +38,12 @@ public class ReminderController {
             finalRuns[i] = Instant.parse(finalLocalRuns[i]).atZone(ZoneId.of(zoneId));
         }
 
-        // create Reminder with populated values and save it to db
-        return repo.save(new Reminder(reminderRequest, nextRuns, finalRuns));
+        // create Notification with populated values and save it to db
+        return repo.save(new Notification(notificationRequest, nextRuns, finalRuns));
     }
 
-    @DeleteMapping("/deletereminder/{id}")
-    public void deleteReminder(@PathVariable String id) {
+    @DeleteMapping("/deletenotification/{id}")
+    public void deleteNotification(@PathVariable String id) {
         repo.findById(id).ifPresent(n -> {
             repo.delete(n);
         });
