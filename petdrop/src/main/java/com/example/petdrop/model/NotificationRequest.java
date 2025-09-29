@@ -1,5 +1,7 @@
 package com.example.petdrop.model;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 public class NotificationRequest {
@@ -10,13 +12,13 @@ public class NotificationRequest {
     private String body;
     private Map<String, Object> data;
 
-    private String[] nextLocalRuns;
-    private String[] finalLocalRuns;
-    private String zoneId;
+    private LocalDateTime[] nextLocalRuns;
+    private LocalDateTime[] finalLocalRuns;
+    private ZoneId zoneId;
     private long repeatInterval;
 
     public NotificationRequest(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-            String[] nextLocalRuns, String[] finalLocalRuns, String zoneId, long repeatInterval) {
+            LocalDateTime[] nextLocalRuns, LocalDateTime[] finalLocalRuns, ZoneId zoneId, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
@@ -68,27 +70,27 @@ public class NotificationRequest {
         this.data = data;
     }
 
-    public String[] getNextLocalRuns() {
+    public LocalDateTime[] getNextLocalRuns() {
         return nextLocalRuns;
     }
 
-    public void setNextLocalRuns(String[] nextLocalRuns) {
+    public void setNextLocalRuns(LocalDateTime[] nextLocalRuns) {
         this.nextLocalRuns = nextLocalRuns;
     }
 
-    public String[] getFinalLocalRuns() {
+    public LocalDateTime[] getFinalLocalRuns() {
         return finalLocalRuns;
     }
 
-    public void setFinalLocalRuns(String[] finalLocalRuns) {
+    public void setFinalLocalRuns(LocalDateTime[] finalLocalRuns) {
         this.finalLocalRuns = finalLocalRuns;
     }
 
-    public String getZoneId() {
+    public ZoneId getZoneId() {
         return zoneId;
     }
 
-    public void setZoneId(String zoneId) {
+    public void setZoneId(ZoneId zoneId) {
         this.zoneId = zoneId;
     }
 
