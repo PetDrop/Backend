@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.DatabaseNotification;
 import com.example.petdrop.repository.NotificationRepository;
 
 @Service
@@ -24,7 +24,7 @@ public class NotificationScheduler {
     @Scheduled(fixedRate = 60000)
     public void processNotifications() {
         ZonedDateTime curTime = ZonedDateTime.now();
-        List<Notification> dueNotifs = repo.findDueNotifications(curTime);
+        List<DatabaseNotification> dueNotifs = repo.findDueNotifications(curTime);
         if (dueNotifs.isEmpty()) {
             return;
         }
@@ -32,11 +32,11 @@ public class NotificationScheduler {
         // send all due notifications in chunks
         expoPushService.sendPushBatch(dueNotifs);
 
-        List<Notification> toDelete = new ArrayList<>();
-        List<Notification> toUpdate = new ArrayList<>();
+        List<DatabaseNotification> toDelete = new ArrayList<>();
+        List<DatabaseNotification> toUpdate = new ArrayList<>();
 
         // update scheduling info
-        for (Notification n : dueNotifs) {
+        for (DatabaseNotification n : dueNotifs) {
             boolean notifToBeDeleted = true;
             if (n.getRepeatInterval() != 0) {
                 ZonedDateTime[] nextRuns = n.getNextRuns();

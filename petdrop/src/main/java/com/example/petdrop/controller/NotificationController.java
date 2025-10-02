@@ -1,9 +1,5 @@
 package com.example.petdrop.controller;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.DatabaseNotification;
 import com.example.petdrop.model.NotificationRequest;
 import com.example.petdrop.repository.NotificationRepository;
 
@@ -22,24 +18,8 @@ public class NotificationController {
     private NotificationRepository repo;
 
     @PostMapping("/add-notification")
-    public Notification addNotification(@RequestBody NotificationRequest notificationRequest) {
-        // store repeated fields to be concise and efficient
-        LocalDateTime[] nextLocalRuns = notificationRequest.getNextLocalRuns();
-        LocalDateTime[] finalLocalRuns = notificationRequest.getFinalLocalRuns();
-        ZoneId zoneId = notificationRequest.getZoneId();
-
-        // instantiate arrays to be populated
-        ZonedDateTime[] nextRuns = new ZonedDateTime[nextLocalRuns.length];
-        ZonedDateTime[] finalRuns = new ZonedDateTime[finalLocalRuns.length];
-
-        // get ZonedDateTime from each LocalDateTime formatted string using zoneIds (arrays must be kept consistent to avoid errors here)
-        for (int i = 0; i < nextRuns.length; i++) {
-            nextRuns[i] = ZonedDateTime.of(nextLocalRuns[i], zoneId);
-            nextRuns[i] = ZonedDateTime.of(finalLocalRuns[i], zoneId);
-        }
-
-        // create Notification with populated values and save it to db
-        return repo.save(new Notification(notificationRequest, nextRuns, finalRuns));
+    public DatabaseNotification addNotification(@RequestBody NotificationRequest notificationRequest) {
+        return repo.save(NotificationRequest.makeIntoDBNotif(notificationRequest));
     }
 
     @DeleteMapping("/delete-notification/{id}")

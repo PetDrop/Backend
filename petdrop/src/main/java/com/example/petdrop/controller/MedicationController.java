@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.Medication;
-import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.DatabaseNotification;
+import com.example.petdrop.model.NotificationRequest;
 import com.example.petdrop.repository.MedicationRepository;
 import com.example.petdrop.repository.NotificationRepository;
 
@@ -35,44 +36,48 @@ public class MedicationController {
     // save medication to db
     @PostMapping("/add-medication")
     public Medication addMedication(@RequestBody Medication medication) {
-        notificationRepo.saveAll(Arrays.asList(medication.getNotifications()));
+        notificationRepo.saveAll(NotificationRequest.makeIntoDBNotif(medication.getNotifications()));
         return medicationRepo.save(medication);
     }
 
     // adds notifs to med that doesn't already have any
     @PutMapping("/create-notifications-for-medication/{id}")
-    public Medication createNotifications(@PathVariable String id, @RequestBody Notification[] notifications) {
+    public Medication createNotifications(@PathVariable String id,
+            @RequestBody NotificationRequest[] notificationRequests) {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
 
-        List<Notification> savedNotifs = notificationRepo.saveAll(Arrays.asList(notifications));
+        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(notificationRequests);
+        notifs = notificationRepo.saveAll(notifs);
 
-        medication.setNotifications(savedNotifs.toArray(new Notification[0]));
+        medication.setNotifications(notifs.toArray(new DatabaseNotification[0]));
         return medicationRepo.save(medication);
     }
 
     // reconcile old notifs with new notifs for a med
     @PutMapping("/edit-notifications-for-medication/{id}")
-    public Medication editNotifications(@PathVariable String id, @RequestBody Notification[] notifications) {
+    public Medication editNotifications(@PathVariable String id,
+            @RequestBody NotificationRequest[] notificationRequests) {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        List<Notification> oldNotifs = Arrays.asList(medication.getNotifications());
+        List<DatabaseNotification> oldNotifs = Arrays.asList(medication.getNotifications());
 
-        List<Notification> toDelete = new ArrayList<Notification>();
+        List<DatabaseNotification> toDelete = new ArrayList<DatabaseNotification>();
 
-        List<Notification> savedNotifs = notificationRepo.saveAll(Arrays.asList(notifications));
+        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(notificationRequests);
+        notifs = notificationRepo.saveAll(notifs);
 
-        Set<String> newNotifsIDs = savedNotifs.stream()
-                .map(Notification::getId)
+        Set<String> newNotifsIDs = notifs.stream()
+                .map(DatabaseNotification::getId)
                 .collect(Collectors.toSet());
-        for (Notification notif : oldNotifs) {
+        for (DatabaseNotification notif : oldNotifs) {
             if (!newNotifsIDs.contains(notif.getId())) {
                 toDelete.add(notif);
             }
         }
         notificationRepo.deleteAll(toDelete);
 
-        medication.setNotifications(savedNotifs.toArray(new Notification[0]));
+        medication.setNotifications(notifs.toArray(new DatabaseNotification[0]));
         return medicationRepo.save(medication);
     }
 
@@ -97,7 +102,7 @@ public class MedicationController {
     // updates all fields in med and creates notifs
     @PutMapping("/update-medication-create-notifications")
     public Medication updateMedicationCreateNotifications(@RequestBody Medication updatedMedication) {
-        notificationRepo.saveAll(Arrays.asList(updatedMedication.getNotifications()));
+        notificationRepo.saveAll(NotificationRequest.makeIntoDBNotif(updatedMedication.getNotifications()));
         return medicationRepo.save(updatedMedication);
     }
 
@@ -106,16 +111,17 @@ public class MedicationController {
     public Medication updateMedicationAndNotifications(@RequestBody Medication updatedMedication) {
         Medication oldMedication = medicationRepo.findById(updatedMedication.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        List<Notification> oldNotifs = Arrays.asList(oldMedication.getNotifications());
+        List<DatabaseNotification> oldNotifs = Arrays.asList(oldMedication.getNotifications());
 
-        List<Notification> toDelete = new ArrayList<Notification>();
+        List<DatabaseNotification> toDelete = new ArrayList<DatabaseNotification>();
 
-        List<Notification> savedNotifs = notificationRepo.saveAll(Arrays.asList(updatedMedication.getNotifications()));
+        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(updatedMedication.getNotifications());
+        notifs = notificationRepo.saveAll(notifs);
 
-        Set<String> newNotifsIDs = savedNotifs.stream()
-                .map(Notification::getId)
+        Set<String> newNotifsIDs = notifs.stream()
+                .map(DatabaseNotification::getId)
                 .collect(Collectors.toSet());
-        for (Notification notif : oldNotifs) {
+        for (DatabaseNotification notif : oldNotifs) {
             if (!newNotifsIDs.contains(notif.getId())) {
                 toDelete.add(notif);
             }
@@ -130,7 +136,9 @@ public class MedicationController {
     public Medication updateMedicationDeleteNotifications(@RequestBody Medication updatedMedication) {
         Medication oldMedication = medicationRepo.findById(updatedMedication.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        notificationRepo.deleteAll(Arrays.asList(oldMedication.getNotifications()));
+
+        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(oldMedication.getNotifications());
+        notificationRepo.deleteAll(notifs);
 
         return medicationRepo.save(updatedMedication);
     }
@@ -140,7 +148,10 @@ public class MedicationController {
     public void deleteMedicationById(@PathVariable String id) {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        notificationRepo.deleteAll(Arrays.asList(medication.getNotifications()));
+                
+        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(medication.getNotifications());
+        notificationRepo.deleteAll(notifs);
+
         medicationRepo.delete(medication);
     }
 

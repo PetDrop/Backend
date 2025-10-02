@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.DatabaseNotification;
 
 @Service
 public class ExpoPushService {
@@ -22,14 +22,14 @@ public class ExpoPushService {
     private static final int MAX_BATCH_SIZE = 100;
     private static final String EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send";
 
-    public void sendPushBatch(List<Notification> notifications) {
+    public void sendPushBatch(List<DatabaseNotification> notifications) {
         // break into chunks of MAX_BATCH_SIZE
         for (int i = 0; i < notifications.size(); i += MAX_BATCH_SIZE) {
             int end = Math.min(i + MAX_BATCH_SIZE, notifications.size());
-            List<Notification> chunk = notifications.subList(i, end);
+            List<DatabaseNotification> chunk = notifications.subList(i, end);
 
             List<Map<String, Object>> messages = new ArrayList<>();
-            for (Notification n : chunk) {
+            for (DatabaseNotification n : chunk) {
                 Map<String, Object> payload = new HashMap<>();
                 payload.put("to", n.getExpoPushToken());
                 payload.put("title", n.getTitle());

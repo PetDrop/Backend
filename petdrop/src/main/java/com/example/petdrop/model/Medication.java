@@ -16,11 +16,11 @@ public class Medication {
     private DateObj[] dates;
 
     @DocumentReference(collection = "notifications")
-    private Notification[] notifications;
+    private DatabaseNotification[] notifications;
 
     private int range;
     
-    public Medication(String id, String name, String color, String description, DateObj[] dates, Notification[] notifications, int range) {
+    public Medication(String id, String name, String color, String description, DateObj[] dates, DatabaseNotification[] notifications, int range) {
         super();
         this.id = id;
         this.name = name;
@@ -51,7 +51,7 @@ public class Medication {
         return dates;
     }
 
-    public Notification[] getNotifications() {
+    public DatabaseNotification[] getNotifications() {
         return notifications;
     }
 
@@ -79,7 +79,7 @@ public class Medication {
         this.dates = dates;
     }
 
-    public void setNotifications(Notification[] notifications) {
+    public void setNotifications(DatabaseNotification[] notifications) {
         this.notifications = notifications;
     }
 

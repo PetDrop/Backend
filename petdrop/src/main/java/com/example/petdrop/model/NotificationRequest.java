@@ -2,9 +2,13 @@ package com.example.petdrop.model;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-public class NotificationRequest {
+public class NotificationRequest extends Notification {
     private String id;
 
     private String expoPushToken;
@@ -16,6 +20,42 @@ public class NotificationRequest {
     private LocalDateTime[] finalLocalRuns;
     private ZoneId zoneId;
     private long repeatInterval;
+
+    public static DatabaseNotification makeIntoDBNotif(NotificationRequest notifReq) {
+        // create variables to avoid repetetive getter calls
+        LocalDateTime[] nextLocalRuns = notifReq.getNextLocalRuns();
+        LocalDateTime[] finalLocalRuns = notifReq.getFinalLocalRuns();
+        ZoneId zoneId = notifReq.getZoneId();
+
+        // instantiate arrays to be populated
+        ZonedDateTime[] nextRuns = new ZonedDateTime[nextLocalRuns.length];
+        ZonedDateTime[] finalRuns = new ZonedDateTime[finalLocalRuns.length];
+
+        // get ZonedDateTime from each LocalDateTime formatted string using zoneIds
+        // (arrays must be kept consistent to avoid errors here)
+        for (int i = 0; i < nextRuns.length; i++) {
+            nextRuns[i] = ZonedDateTime.of(nextLocalRuns[i], zoneId);
+            nextRuns[i] = ZonedDateTime.of(finalLocalRuns[i], zoneId);
+        }
+
+        return new DatabaseNotification(notifReq, nextRuns, finalRuns);
+    }
+
+    // redundant function used to allow for polymorphism
+    public static List<DatabaseNotification> makeIntoDBNotif(DatabaseNotification[] databaseNotifications) {
+        return Arrays.asList(databaseNotifications);
+    }
+
+    public static List<DatabaseNotification> makeIntoDBNotif(NotificationRequest[] notificationRequests) {
+        ArrayList<DatabaseNotification> notifs = new ArrayList<DatabaseNotification>();
+
+        // turn each notifReq into a Notification
+        for (NotificationRequest notifReq : notificationRequests) {
+            notifs.add(makeIntoDBNotif(notifReq));
+        }
+
+        return notifs;
+    }
 
     public NotificationRequest(String id, String expoPushToken, String title, String body, Map<String, Object> data,
             LocalDateTime[] nextLocalRuns, LocalDateTime[] finalLocalRuns, ZoneId zoneId, long repeatInterval) {

@@ -4,8 +4,10 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Notification {
+@Document(collection = "notification")
+public class DatabaseNotification extends Notification{
     @Id
     private String id;
 
@@ -18,11 +20,11 @@ public class Notification {
     private ZonedDateTime[] finalRuns; // when to send last
     private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
 
-    public Notification() {
+    public DatabaseNotification() {
         super();
     }
 
-    public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
+    public DatabaseNotification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
             ZonedDateTime[] nextRuns, ZonedDateTime[] lastRuns, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
@@ -34,7 +36,7 @@ public class Notification {
         this.repeatInterval = repeatInterval;
     }
 
-    public Notification(NotificationRequest notificationRequest, ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns) {
+    public DatabaseNotification(NotificationRequest notificationRequest, ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns) {
         this.id = notificationRequest.getId();
         this.expoPushToken = notificationRequest.getExpoPushToken();
         this.title = notificationRequest.getTitle();
