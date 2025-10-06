@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.Medication;
+import com.example.petdrop.dto.NotificationRequest;
 import com.example.petdrop.model.DatabaseNotification;
-import com.example.petdrop.model.NotificationRequest;
 import com.example.petdrop.repository.MedicationRepository;
 import com.example.petdrop.repository.NotificationRepository;
 

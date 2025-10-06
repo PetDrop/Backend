@@ -1,13 +1,18 @@
 package com.example.petdrop.model;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.example.petdrop.dto.Notification;
+import com.example.petdrop.dto.NotificationRequest;
+
 @Document(collection = "notification")
-public class DatabaseNotification extends Notification{
+public class DatabaseNotification extends Notification {
     @Id
     private String id;
 
@@ -16,23 +21,24 @@ public class DatabaseNotification extends Notification{
     private String body;
     private Map<String, Object> data;
 
-    private ZonedDateTime[] nextRuns; // when to send next
-    private ZonedDateTime[] finalRuns; // when to send last
-    private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
+    private Instant[] nextRuns; // when to send next
+    private Instant[] finalRuns; // when to send last
+    private long repeatInterval; // minutes between each notification, 0 if one-time
 
+    // ---------- Constructors ----------
     public DatabaseNotification() {
         super();
     }
 
     public DatabaseNotification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-            ZonedDateTime[] nextRuns, ZonedDateTime[] lastRuns, long repeatInterval) {
+                                ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
         this.body = body;
         this.data = data;
-        this.nextRuns = nextRuns;
-        this.finalRuns = lastRuns;
+        this.nextRuns = zonedToInstants(nextRuns);
+        this.finalRuns = zonedToInstants(finalRuns);
         this.repeatInterval = repeatInterval;
     }
 
@@ -42,11 +48,31 @@ public class DatabaseNotification extends Notification{
         this.title = notificationRequest.getTitle();
         this.body = notificationRequest.getBody();
         this.data = notificationRequest.getData();
-        this.nextRuns = nextRuns;
-        this.finalRuns = finalRuns;
+        this.nextRuns = zonedToInstants(nextRuns);
+        this.finalRuns = zonedToInstants(finalRuns);
         this.repeatInterval = notificationRequest.getRepeatInterval();
     }
 
+    // ---------- Helper conversion methods ----------
+    public static Instant[] zonedToInstants(ZonedDateTime[] zonedDateTimes) {
+        if (zonedDateTimes == null) return null;
+        Instant[] instants = new Instant[zonedDateTimes.length];
+        for (int i = 0; i < zonedDateTimes.length; i++) {
+            instants[i] = zonedDateTimes[i].toInstant();
+        }
+        return instants;
+    }
+
+    public static ZonedDateTime[] instantsToZoned(Instant[] instants) {
+        if (instants == null) return null;
+        ZonedDateTime[] zoned = new ZonedDateTime[instants.length];
+        for (int i = 0; i < instants.length; i++) {
+            zoned[i] = instants[i].atZone(ZoneId.systemDefault());
+        }
+        return zoned;
+    }
+
+    // ---------- Getters & Setters ----------
     public String getId() {
         return id;
     }
@@ -87,19 +113,19 @@ public class DatabaseNotification extends Notification{
         this.data = data;
     }
 
-    public ZonedDateTime[] getNextRuns() {
+    public Instant[] getNextRuns() {
         return nextRuns;
     }
 
-    public void setNextRuns(ZonedDateTime[] nextRuns) {
+    public void setNextRuns(Instant[] nextRuns) {
         this.nextRuns = nextRuns;
     }
 
-    public ZonedDateTime[] getFinalRuns() {
+    public Instant[] getFinalRuns() {
         return finalRuns;
     }
 
-    public void setFinalRuns(ZonedDateTime[] finalRuns) {
+    public void setFinalRuns(Instant[] finalRuns) {
         this.finalRuns = finalRuns;
     }
 
@@ -109,5 +135,14 @@ public class DatabaseNotification extends Notification{
 
     public void setRepeatInterval(long repeatInterval) {
         this.repeatInterval = repeatInterval;
+    }
+
+    // ---------- Convenience methods for ZonedDateTime conversion ----------
+    public ZonedDateTime[] getNextRunsZoned() {
+        return instantsToZoned(nextRuns);
+    }
+
+    public ZonedDateTime[] getFinalRunsZoned() {
+        return instantsToZoned(finalRuns);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.petdrop.service;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class NotificationScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void processNotifications() {
-        ZonedDateTime curTime = ZonedDateTime.now();
+        Instant curTime = Instant.now();
         List<DatabaseNotification> dueNotifs = repo.findDueNotifications(curTime);
         if (dueNotifs.isEmpty()) {
             return;
@@ -39,11 +39,11 @@ public class NotificationScheduler {
         for (DatabaseNotification n : dueNotifs) {
             boolean notifToBeDeleted = true;
             if (n.getRepeatInterval() != 0) {
-                ZonedDateTime[] nextRuns = n.getNextRuns();
+                Instant[] nextRuns = n.getNextRuns();
                 for (int i = 0; i < nextRuns.length; i++) {
                     if (nextRuns[i].isBefore(curTime)) {
                         if (nextRuns[i].isBefore(n.getFinalRuns()[i])) {
-                            nextRuns[i] = nextRuns[i].plusMinutes(n.getRepeatInterval());
+                            nextRuns[i] = nextRuns[i].plusSeconds(n.getRepeatInterval() * 60);
                             n.setNextRuns(nextRuns);
                             notifToBeDeleted = false;
                         }

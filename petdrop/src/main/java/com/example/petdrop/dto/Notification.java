@@ -1,21 +1,28 @@
-package com.example.petdrop.model;
+package com.example.petdrop.dto;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Map;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 
 public class Notification {
-    @Id
+    @Transient
     private String id;
 
+    @Transient
     private String expoPushToken; // device token
+    @Transient
     private String title;
+    @Transient
     private String body;
+    @Transient
     private Map<String, Object> data;
 
-    private ZonedDateTime[] nextRuns; // when to send next
-    private ZonedDateTime[] finalRuns; // when to send last
+    @Transient
+    private Instant[] nextRuns; // when to send next
+    @Transient
+    private Instant[] finalRuns; // when to send last
+    @Transient
     private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
 
     public Notification() {
@@ -23,7 +30,7 @@ public class Notification {
     }
 
     public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-            ZonedDateTime[] nextRuns, ZonedDateTime[] lastRuns, long repeatInterval) {
+            Instant[] nextRuns, Instant[] lastRuns, long repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
@@ -34,7 +41,7 @@ public class Notification {
         this.repeatInterval = repeatInterval;
     }
 
-    public Notification(NotificationRequest notificationRequest, ZonedDateTime[] nextRuns, ZonedDateTime[] finalRuns) {
+    public Notification(NotificationRequest notificationRequest, Instant[] nextRuns, Instant[] finalRuns) {
         this.id = notificationRequest.getId();
         this.expoPushToken = notificationRequest.getExpoPushToken();
         this.title = notificationRequest.getTitle();
@@ -85,19 +92,19 @@ public class Notification {
         this.data = data;
     }
 
-    public ZonedDateTime[] getNextRuns() {
+    public Instant[] getNextRuns() {
         return nextRuns;
     }
 
-    public void setNextRuns(ZonedDateTime[] nextRuns) {
+    public void setNextRuns(Instant[] nextRuns) {
         this.nextRuns = nextRuns;
     }
 
-    public ZonedDateTime[] getFinalRuns() {
+    public Instant[] getFinalRuns() {
         return finalRuns;
     }
 
-    public void setFinalRuns(ZonedDateTime[] finalRuns) {
+    public void setFinalRuns(Instant[] finalRuns) {
         this.finalRuns = finalRuns;
     }
 

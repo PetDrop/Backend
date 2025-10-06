@@ -1,4 +1,4 @@
-package com.example.petdrop.model;
+package com.example.petdrop.dto;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -8,17 +8,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.annotation.Transient;
+
+import com.example.petdrop.model.DatabaseNotification;
+
 public class NotificationRequest extends Notification {
+    @Transient
     private String id;
 
+    @Transient
     private String expoPushToken;
+    @Transient
     private String title;
+    @Transient
     private String body;
+    @Transient
     private Map<String, Object> data;
 
+    @Transient
     private LocalDateTime[] nextLocalRuns;
+    @Transient
     private LocalDateTime[] finalLocalRuns;
+    @Transient
     private ZoneId zoneId;
+    @Transient
     private long repeatInterval;
 
     public static DatabaseNotification makeIntoDBNotif(NotificationRequest notifReq) {
@@ -78,11 +91,11 @@ public class NotificationRequest extends Notification {
         this.id = id;
     }
 
-    public String getExpoPushToken() {
+    public String get_expoPushToken() {
         return expoPushToken;
     }
 
-    public void setExpoPushToken(String expoPushToken) {
+    public void set_expoPushToken(String expoPushToken) {
         this.expoPushToken = expoPushToken;
     }
 
