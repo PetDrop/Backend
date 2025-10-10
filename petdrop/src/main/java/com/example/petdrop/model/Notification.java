@@ -1,106 +1,102 @@
 package com.example.petdrop.model;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,      // Use a type name, not a class name
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type",                // The field name in JSON that tells which subtype to use
-    visible = false
-)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = DatabaseNotification.class, name = "database"),
-    @JsonSubTypes.Type(value = NotificationRequest.class, name = "request")
-})
-
-
-public abstract class Notification {
-    @Transient
+@Document("notification")
+public class Notification {
+    @Id
     private String id;
 
-    @Transient
     private String expoPushToken; // device token
-    @Transient
     private String title;
-    @Transient
     private String body;
-    @Transient
     private Map<String, Object> data;
 
-    @Transient
     private Instant[] nextRuns; // when to send next
-    @Transient
     private Instant[] finalRuns; // when to send last
-    @Transient
-    private long repeatInterval; // minutes between each time notif is sent, 0 if one-time
+    private long repeatInterval; // minutes between each notification, 0 if one-time
 
-    public static List<DatabaseNotification> makeIntoDBNotifsList(Notification[] notifs) {
-        if (notifs == null) {
-            return new ArrayList<>();
-        }
-
-        List<DatabaseNotification> dbNotifs = new ArrayList<>(notifs.length);
-
-        for (int i = 0; i < notifs.length; i++) {
-            dbNotifs.add(notifs[i].makeIntoDBNotif());
-        }
-
-        return dbNotifs;
+    public Notification() {
+        super();
     }
 
-    public static DatabaseNotification[] makeIntoDBNotifsArr(Notification[] notifs) {
-        if (notifs == null) {
-            return new DatabaseNotification[0];
-        }
-
-        DatabaseNotification[] dbNotifs = new DatabaseNotification[notifs.length];
-
-        for (int i = 0; i < notifs.length; i++) {
-            dbNotifs[i] = notifs[i].makeIntoDBNotif();
-        }
-
-        return dbNotifs;
+    public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
+                                Instant[] nextRuns, Instant[] finalRuns, long repeatInterval) {
+        this.id = id;
+        this.expoPushToken = expoPushToken;
+        this.title = title;
+        this.body = body;
+        this.data = data;
+        this.nextRuns = nextRuns;
+        this.finalRuns = finalRuns;
+        this.repeatInterval = repeatInterval;
     }
 
-    public abstract DatabaseNotification makeIntoDBNotif();
+    public String getId() {
+        return id;
+    }
 
-    public abstract String getId();
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public abstract void setId(String id);
+    public String getExpoPushToken() {
+        return expoPushToken;
+    }
 
-    public abstract String getExpoPushToken();
+    public void setExpoPushToken(String expoPushToken) {
+        this.expoPushToken = expoPushToken;
+    }
 
-    public abstract void setExpoPushToken(String expoPushToken);
+    public String getTitle() {
+        return title;
+    }
 
-    public abstract String getTitle();
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public abstract void setTitle(String title);
+    public String getBody() {
+        return body;
+    }
 
-    public abstract String getBody();
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-    public abstract void setBody(String body);
+    public Map<String, Object> getData() {
+        return data;
+    }
 
-    public abstract Map<String, Object> getData();
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
 
-    public abstract void setData(Map<String, Object> data);
+    public Instant[] getNextRuns() {
+        return nextRuns;
+    }
 
-    public abstract Instant[] getNextRuns();
+    public void setNextRuns(Instant[] nextRuns) {
+        this.nextRuns = nextRuns;
+    }
 
-    public abstract void setNextRuns(Instant[] nextRuns);
+    public Instant[] getFinalRuns() {
+        return finalRuns;
+    }
 
-    public abstract Instant[] getFinalRuns();
+    public void setFinalRuns(Instant[] finalRuns) {
+        this.finalRuns = finalRuns;
+    }
 
-    public abstract void setFinalRuns(Instant[] finalRuns);
+    public long getRepeatInterval() {
+        return repeatInterval;
+    }
 
-    public abstract long getRepeatInterval();
-
-    public abstract void setRepeatInterval(long repeatInterval);
+    public void setRepeatInterval(long repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
 }

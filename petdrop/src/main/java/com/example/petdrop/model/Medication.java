@@ -1,5 +1,7 @@
 package com.example.petdrop.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -15,7 +17,7 @@ public class Medication {
     private String description;
 
     @DocumentReference(collection = "notification")
-    private Notification[] notifications;
+    private List<Notification> notifications;
 
     private int range;
 
@@ -38,7 +40,7 @@ public class Medication {
         return result.toString();
     }
 
-    public Medication(String id, String name, String color, String description, Notification[] notifications,
+    public Medication(String id, String name, String color, String description, List<Notification> notifications,
             int range) {
         super();
         this.id = id;
@@ -65,7 +67,7 @@ public class Medication {
         return description;
     }
 
-    public Notification[] getNotifications() {
+    public List<Notification> getNotifications() {
         return notifications;
     }
 
@@ -89,7 +91,7 @@ public class Medication {
         this.description = description;
     }
 
-    public void setNotifications(Notification[] notifications) {
+    public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
 

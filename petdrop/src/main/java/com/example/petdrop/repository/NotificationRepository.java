@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import com.example.petdrop.model.DatabaseNotification;
+import com.example.petdrop.model.Notification;
 
-public interface NotificationRepository extends MongoRepository<DatabaseNotification, String> {
+public interface NotificationRepository extends MongoRepository<Notification, String> {
     @Query("{ 'nextRuns': { $lt: ?0 } }")
-    List<DatabaseNotification> findDueNotifications(Instant time);
+    List<Notification> findDueNotifications(Instant time);
 }
 
