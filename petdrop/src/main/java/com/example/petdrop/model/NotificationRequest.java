@@ -1,16 +1,12 @@
-package com.example.petdrop.dto;
+package com.example.petdrop.model;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Transient;
-
-import com.example.petdrop.model.DatabaseNotification;
 
 public class NotificationRequest extends Notification {
     @Transient
@@ -30,15 +26,15 @@ public class NotificationRequest extends Notification {
     @Transient
     private LocalDateTime[] finalLocalRuns;
     @Transient
-    private ZoneId zoneId;
-    @Transient
     private long repeatInterval;
+    @Transient
+    private ZoneId zoneId;
 
-    public static DatabaseNotification makeIntoDBNotif(NotificationRequest notifReq) {
-        // create variables to avoid repetetive getter calls
-        LocalDateTime[] nextLocalRuns = notifReq.getNextLocalRuns();
-        LocalDateTime[] finalLocalRuns = notifReq.getFinalLocalRuns();
-        ZoneId zoneId = notifReq.getZoneId();
+    public DatabaseNotification makeIntoDBNotif() {
+        // if no runs (which shouldn't ever happen technically) then return empty arrays
+        if (nextLocalRuns == null || nextLocalRuns.length == 0) { // nextLocalRuns and finalLocalRuns should be same length
+            return new DatabaseNotification(this, new ZonedDateTime[0], new ZonedDateTime[0]);
+        }
 
         // instantiate arrays to be populated
         ZonedDateTime[] nextRuns = new ZonedDateTime[nextLocalRuns.length];
@@ -48,30 +44,15 @@ public class NotificationRequest extends Notification {
         // (arrays must be kept consistent to avoid errors here)
         for (int i = 0; i < nextRuns.length; i++) {
             nextRuns[i] = ZonedDateTime.of(nextLocalRuns[i], zoneId);
-            nextRuns[i] = ZonedDateTime.of(finalLocalRuns[i], zoneId);
+            finalRuns[i] = ZonedDateTime.of(finalLocalRuns[i], zoneId);
         }
 
-        return new DatabaseNotification(notifReq, nextRuns, finalRuns);
-    }
-
-    // redundant function used to allow for polymorphism
-    public static List<DatabaseNotification> makeIntoDBNotif(DatabaseNotification[] databaseNotifications) {
-        return Arrays.asList(databaseNotifications);
-    }
-
-    public static List<DatabaseNotification> makeIntoDBNotif(NotificationRequest[] notificationRequests) {
-        ArrayList<DatabaseNotification> notifs = new ArrayList<DatabaseNotification>();
-
-        // turn each notifReq into a Notification
-        for (NotificationRequest notifReq : notificationRequests) {
-            notifs.add(makeIntoDBNotif(notifReq));
-        }
-
-        return notifs;
+        // use constructor to do final steps
+        return new DatabaseNotification(this, nextRuns, finalRuns);
     }
 
     public NotificationRequest(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-            LocalDateTime[] nextLocalRuns, LocalDateTime[] finalLocalRuns, ZoneId zoneId, long repeatInterval) {
+            LocalDateTime[] nextLocalRuns, LocalDateTime[] finalLocalRuns, long repeatInterval, ZoneId zoneId) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
@@ -79,46 +60,56 @@ public class NotificationRequest extends Notification {
         this.data = data;
         this.nextLocalRuns = nextLocalRuns;
         this.finalLocalRuns = finalLocalRuns;
-        this.zoneId = zoneId;
         this.repeatInterval = repeatInterval;
+        this.zoneId = zoneId;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    public String get_expoPushToken() {
+    @Override
+    public String getExpoPushToken() {
         return expoPushToken;
     }
 
-    public void set_expoPushToken(String expoPushToken) {
+    @Override
+    public void setExpoPushToken(String expoPushToken) {
         this.expoPushToken = expoPushToken;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
+    @Override
     public String getBody() {
         return body;
     }
 
+    @Override
     public void setBody(String body) {
         this.body = body;
     }
 
+    @Override
     public Map<String, Object> getData() {
         return data;
     }
 
+    @Override
     public void setData(Map<String, Object> data) {
         this.data = data;
     }
@@ -139,6 +130,16 @@ public class NotificationRequest extends Notification {
         this.finalLocalRuns = finalLocalRuns;
     }
 
+    @Override
+    public long getRepeatInterval() {
+        return repeatInterval;
+    }
+
+    @Override
+    public void setRepeatInterval(long repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
+
     public ZoneId getZoneId() {
         return zoneId;
     }
@@ -147,11 +148,31 @@ public class NotificationRequest extends Notification {
         this.zoneId = zoneId;
     }
 
-    public long getRepeatInterval() {
-        return repeatInterval;
+    @Override
+    public Instant[] getNextRuns() {
+        Instant[] nextRuns = new Instant[finalLocalRuns.length];
+
+        for (int i = 0; i < finalLocalRuns.length; i++) {
+            nextRuns[i] = finalLocalRuns[i].toInstant(null);
+        }
+
+        return nextRuns;
     }
 
-    public void setRepeatInterval(long repeatInterval) {
-        this.repeatInterval = repeatInterval;
+    @Override
+    public void setNextRuns(Instant[] nextRuns) {}
+
+    @Override
+    public Instant[] getFinalRuns() {
+        Instant[] finalRuns = new Instant[finalLocalRuns.length];
+
+        for (int i = 0; i < finalLocalRuns.length; i++) {
+            finalRuns[i] = finalLocalRuns[i].toInstant(null);
+        }
+
+        return finalRuns;
     }
+
+    @Override
+    public void setFinalRuns(Instant[] finalRuns) {}
 }

@@ -14,12 +14,32 @@ public class Medication {
     private String color;
     private String description;
 
-    @DocumentReference(collection = "notifications")
-    private DatabaseNotification[] notifications;
+    @DocumentReference(collection = "notification")
+    private Notification[] notifications;
 
     private int range;
-    
-    public Medication(String id, String name, String color, String description, DatabaseNotification[] notifications, int range) {
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("id: " + id + "\n");
+        result.append("name: " + name + "\n");
+        result.append("color: " + color + "\n");
+        result.append("desc: " + description + "\n");
+        result.append("notifications: [");
+        if (!(notifications == null)) {
+            result.append("\n");
+            for (Notification notif : notifications) {
+                result.append(notif.toString() + ",\n\n");
+            }
+        }
+        result.append("]\n");
+        result.append("range: " + range);
+        return result.toString();
+    }
+
+    public Medication(String id, String name, String color, String description, Notification[] notifications,
+            int range) {
         super();
         this.id = id;
         this.name = name;
@@ -45,7 +65,7 @@ public class Medication {
         return description;
     }
 
-    public DatabaseNotification[] getNotifications() {
+    public Notification[] getNotifications() {
         return notifications;
     }
 
@@ -69,7 +89,7 @@ public class Medication {
         this.description = description;
     }
 
-    public void setNotifications(DatabaseNotification[] notifications) {
+    public void setNotifications(Notification[] notifications) {
         this.notifications = notifications;
     }
 

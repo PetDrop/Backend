@@ -8,10 +8,7 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.example.petdrop.dto.Notification;
-import com.example.petdrop.dto.NotificationRequest;
-
-@Document(collection = "notification")
+@Document("notification")
 public class DatabaseNotification extends Notification {
     @Id
     private String id;
@@ -24,6 +21,16 @@ public class DatabaseNotification extends Notification {
     private Instant[] nextRuns; // when to send next
     private Instant[] finalRuns; // when to send last
     private long repeatInterval; // minutes between each notification, 0 if one-time
+
+    @Override
+    public String toString() {
+        return "";
+    }
+
+    @Override
+    public DatabaseNotification makeIntoDBNotif() {
+        return this;
+    }
 
     // ---------- Constructors ----------
     public DatabaseNotification() {

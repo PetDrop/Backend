@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.petdrop.dto.NotificationRequest;
 import com.example.petdrop.model.DatabaseNotification;
 import com.example.petdrop.model.Medication;
+import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.NotificationRequest;
 import com.example.petdrop.repository.MedicationRepository;
 import com.example.petdrop.repository.NotificationRepository;
 
@@ -30,10 +31,10 @@ public class NotificationController {
             @RequestBody NotificationRequest notificationRequest) {
         Medication med = medRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        DatabaseNotification newNotif = NotificationRequest.makeIntoDBNotif(notificationRequest);
+        DatabaseNotification newNotif = notificationRequest.makeIntoDBNotif();
 
         DatabaseNotification[] newNotifs = new DatabaseNotification[med.getNotifications().length + 1];
-        DatabaseNotification[] oldNotifs = med.getNotifications();
+        DatabaseNotification[] oldNotifs = Notification.makeIntoDBNotifsArr(med.getNotifications());
         for (int i = 0; i < oldNotifs.length; i++) {
             newNotifs[i] = oldNotifs[i];
         }
@@ -45,7 +46,7 @@ public class NotificationController {
 
     @PutMapping("update-notification")
     public DatabaseNotification updateNotification(@RequestBody NotificationRequest notificationRequest) {
-        return notifRepo.save(NotificationRequest.makeIntoDBNotif(notificationRequest));
+        return notifRepo.save(notificationRequest.makeIntoDBNotif());
     }
 
     @DeleteMapping("/delete-notification/{id}")
@@ -55,7 +56,7 @@ public class NotificationController {
         DatabaseNotification notifToDelete = notifRepo.findById(notifId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not found"));
 
-        DatabaseNotification[] oldNotifs = med.getNotifications();
+        DatabaseNotification[] oldNotifs = Notification.makeIntoDBNotifsArr(med.getNotifications());
         DatabaseNotification[] newNotifs = new DatabaseNotification[oldNotifs.length - 1];
         int i, j = 0;
         for (i = 0; i < oldNotifs.length; i++) {

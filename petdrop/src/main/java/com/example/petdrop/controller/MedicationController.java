@@ -1,7 +1,6 @@
 package com.example.petdrop.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,9 +17,10 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.petdrop.model.Medication;
-import com.example.petdrop.dto.NotificationRequest;
 import com.example.petdrop.model.DatabaseNotification;
+import com.example.petdrop.model.Medication;
+import com.example.petdrop.model.Notification;
+import com.example.petdrop.model.NotificationRequest;
 import com.example.petdrop.repository.MedicationRepository;
 import com.example.petdrop.repository.NotificationRepository;
 
@@ -36,7 +36,8 @@ public class MedicationController {
     // save medication to db
     @PostMapping("/add-medication")
     public Medication addMedication(@RequestBody Medication medication) {
-        notificationRepo.saveAll(NotificationRequest.makeIntoDBNotif(medication.getNotifications()));
+        notificationRepo.saveAll(Notification.makeIntoDBNotifsList(medication.getNotifications()));
+        medication.setNotifications(Notification.makeIntoDBNotifsArr(medication.getNotifications()));
         return medicationRepo.save(medication);
     }
 
@@ -47,7 +48,7 @@ public class MedicationController {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
 
-        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(notificationRequests);
+        List<DatabaseNotification> notifs = Notification.makeIntoDBNotifsList(notificationRequests);
         notifs = notificationRepo.saveAll(notifs);
 
         medication.setNotifications(notifs.toArray(new DatabaseNotification[0]));
@@ -60,11 +61,11 @@ public class MedicationController {
             @RequestBody NotificationRequest[] notificationRequests) {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        List<DatabaseNotification> oldNotifs = Arrays.asList(medication.getNotifications());
+        List<DatabaseNotification> oldNotifs = Notification.makeIntoDBNotifsList(medication.getNotifications());
 
         List<DatabaseNotification> toDelete = new ArrayList<DatabaseNotification>();
 
-        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(notificationRequests);
+        List<DatabaseNotification> notifs = Notification.makeIntoDBNotifsList(notificationRequests);
         notifs = notificationRepo.saveAll(notifs);
 
         Set<String> newNotifsIDs = notifs.stream()
@@ -87,7 +88,7 @@ public class MedicationController {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
 
-        notificationRepo.deleteAll(Arrays.asList(medication.getNotifications()));
+        notificationRepo.deleteAll(Notification.makeIntoDBNotifsList(medication.getNotifications()));
 
         medication.setNotifications(null);
         return medicationRepo.save(medication);
@@ -102,7 +103,7 @@ public class MedicationController {
     // updates all fields in med and creates notifs
     @PutMapping("/update-medication-create-notifications")
     public Medication updateMedicationCreateNotifications(@RequestBody Medication updatedMedication) {
-        notificationRepo.saveAll(NotificationRequest.makeIntoDBNotif(updatedMedication.getNotifications()));
+        notificationRepo.saveAll(Notification.makeIntoDBNotifsList(updatedMedication.getNotifications()));
         return medicationRepo.save(updatedMedication);
     }
 
@@ -111,11 +112,11 @@ public class MedicationController {
     public Medication updateMedicationAndNotifications(@RequestBody Medication updatedMedication) {
         Medication oldMedication = medicationRepo.findById(updatedMedication.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        List<DatabaseNotification> oldNotifs = Arrays.asList(oldMedication.getNotifications());
+        List<DatabaseNotification> oldNotifs = Notification.makeIntoDBNotifsList(oldMedication.getNotifications());
 
         List<DatabaseNotification> toDelete = new ArrayList<DatabaseNotification>();
 
-        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(updatedMedication.getNotifications());
+        List<DatabaseNotification> notifs = Notification.makeIntoDBNotifsList(updatedMedication.getNotifications());
         notifs = notificationRepo.saveAll(notifs);
 
         Set<String> newNotifsIDs = notifs.stream()
@@ -137,7 +138,7 @@ public class MedicationController {
         Medication oldMedication = medicationRepo.findById(updatedMedication.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
 
-        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(oldMedication.getNotifications());
+        List<DatabaseNotification> notifs = Notification.makeIntoDBNotifsList(oldMedication.getNotifications());
         notificationRepo.deleteAll(notifs);
 
         return medicationRepo.save(updatedMedication);
@@ -148,8 +149,8 @@ public class MedicationController {
     public void deleteMedicationById(@PathVariable String id) {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-                
-        List<DatabaseNotification> notifs = NotificationRequest.makeIntoDBNotif(medication.getNotifications());
+
+        List<DatabaseNotification> notifs = Notification.makeIntoDBNotifsList(medication.getNotifications());
         notificationRepo.deleteAll(notifs);
 
         medicationRepo.delete(medication);
