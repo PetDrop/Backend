@@ -1,6 +1,7 @@
 package com.example.petdrop.service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +39,27 @@ public class NotificationScheduler {
         // update scheduling info
         for (Notification n : dueNotifs) {
             boolean notifToBeDeleted = true;
-            if (n.getRepeatInterval() != 0) {
+            String repeatInterval = n.getRepeatInterval();
+            if (repeatInterval != null && !repeatInterval.isEmpty()) {
                 Instant[] nextRuns = n.getNextRuns();
                 for (int i = 0; i < nextRuns.length; i++) {
                     if (nextRuns[i].isBefore(curTime)) {
                         if (nextRuns[i].isBefore(n.getFinalRuns()[i])) {
-                            nextRuns[i] = nextRuns[i].plusSeconds(n.getRepeatInterval() * 60);
+                            // Add appropriate time interval based on string value
+                            switch (repeatInterval) {
+                                case "daily":
+                                    nextRuns[i] = nextRuns[i].plus(1, ChronoUnit.DAYS);
+                                    break;
+                                case "weekly":
+                                    nextRuns[i] = nextRuns[i].plus(1, ChronoUnit.WEEKS);
+                                    break;
+                                case "monthly":
+                                    nextRuns[i] = nextRuns[i].plus(1, ChronoUnit.MONTHS);
+                                    break;
+                                default:
+                                    // Unknown interval
+                                    break;
+                            }
                             n.setNextRuns(nextRuns);
                             notifToBeDeleted = false;
                         }

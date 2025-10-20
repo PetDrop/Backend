@@ -18,14 +18,14 @@ public class Notification {
 
     private Instant[] nextRuns; // when to send next
     private Instant[] finalRuns; // when to send last
-    private long repeatInterval; // minutes between each notification, 0 if one-time
+    private String repeatInterval; // "daily", "weekly", "monthly", or "" for one-time
 
     public Notification() {
         super();
     }
 
     public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
-                                Instant[] nextRuns, Instant[] finalRuns, long repeatInterval) {
+                                Instant[] nextRuns, Instant[] finalRuns, String repeatInterval) {
         this.id = id;
         this.expoPushToken = expoPushToken;
         this.title = title;
@@ -92,11 +92,11 @@ public class Notification {
         this.finalRuns = finalRuns;
     }
 
-    public long getRepeatInterval() {
+    public String getRepeatInterval() {
         return repeatInterval;
     }
 
-    public void setRepeatInterval(long repeatInterval) {
+    public void setRepeatInterval(String repeatInterval) {
         this.repeatInterval = repeatInterval;
     }
 }
