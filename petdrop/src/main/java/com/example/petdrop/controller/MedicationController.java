@@ -42,12 +42,21 @@ public class MedicationController {
     public Medication addMedication(@PathVariable String id, @RequestBody Medication medication) {
         Pet pet = petRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found"));
-        Medication[] medications = Arrays.copyOf(pet.getMedications(), pet.getMedications().length + 1);
-        medications[medications.length - 1] = medication;
-        pet.setMedications(medications);
+
+        // Save notifications first
+        List<Notification> savedNotifications = notificationRepo.saveAll(medication.getNotifications());
+        medication.setNotifications(savedNotifications);
+
+        // Save the medication
+        Medication savedMedication = medicationRepo.save(medication);
+
+        // Update pet's medications array
+        List<Medication> medications = new ArrayList<>(Arrays.asList(pet.getMedications()));
+        medications.add(savedMedication);
+        pet.setMedications(medications.toArray(new Medication[0]));
         petRepo.save(pet);
-        medication.setNotifications(notificationRepo.saveAll(medication.getNotifications()));
-        return medicationRepo.save(medication);
+
+        return savedMedication;
     }
 
     // adds notifs to med that doesn't already have any
@@ -57,11 +66,7 @@ public class MedicationController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
 
         List<Notification> newNotifs = notificationRepo.saveAll(notifications);
-
-        List<Notification> oldNotifs = medication.getNotifications();
-        for (Notification notif: newNotifs) {
-            oldNotifs.add(notif);
-        }
+        medication.setNotifications(newNotifs);
 
         return medicationRepo.save(medication);
     }
@@ -99,7 +104,7 @@ public class MedicationController {
 
         notificationRepo.deleteAll(medication.getNotifications());
 
-        medication.getNotifications().clear();
+        medication.setNotifications(new ArrayList<Notification>());
         return medicationRepo.save(medication);
     }
 
@@ -165,13 +170,13 @@ public class MedicationController {
         medicationRepo.delete(medication);
 
         Medication[] medications = pet.getMedications();
-        Medication[] newMedications = new Medication[medications.length - 1];
-        for (int i = 0; i < medications.length; i++) {
-            if (!medications[i].getId().equals(id)) {
-                newMedications[i] = medications[i];
+        List<Medication> filteredMedications = new ArrayList<>();
+        for (Medication med : medications) {
+            if (!med.getId().equals(id)) {
+                filteredMedications.add(med);
             }
         }
-        pet.setMedications(newMedications);
+        pet.setMedications(filteredMedications.toArray(new Medication[0]));
         petRepo.save(pet);
     }
 
