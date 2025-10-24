@@ -1,6 +1,7 @@
 package com.example.petdrop.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.Notification;
 import com.example.petdrop.model.Medication;
+import com.example.petdrop.model.Pet;
 import com.example.petdrop.repository.MedicationRepository;
 import com.example.petdrop.repository.NotificationRepository;
+import com.example.petdrop.repository.PetRepository;
 
 @RestController
 public class MedicationController {
@@ -31,13 +34,19 @@ public class MedicationController {
     @Autowired
     private NotificationRepository notificationRepo;
 
+    @Autowired
+    private PetRepository petRepo;
+
     // save medication to db
-    @PostMapping("/add-medication")
-    public Medication addMedication(@RequestBody Medication medication) {
-        System.out.println("null");
-        System.out.println(medication.getNotifications().get(0).getClass());
-        System.out.println(notificationRepo.saveAll(medication.getNotifications()));
-        medication.setNotifications(medication.getNotifications());
+    @PostMapping("/add-medication/{id}")
+    public Medication addMedication(@PathVariable String id, @RequestBody Medication medication) {
+        Pet pet = petRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found"));
+        Medication[] medications = Arrays.copyOf(pet.getMedications(), pet.getMedications().length + 1);
+        medications[medications.length - 1] = medication;
+        pet.setMedications(medications);
+        petRepo.save(pet);
+        medication.setNotifications(notificationRepo.saveAll(medication.getNotifications()));
         return medicationRepo.save(medication);
     }
 
@@ -148,10 +157,22 @@ public class MedicationController {
     public void deleteMedicationById(@PathVariable String id) {
         Medication medication = medicationRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
+        Pet pet = petRepo.findPetByMedicationId(medication.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found"));
 
         notificationRepo.deleteAll(medication.getNotifications());
 
         medicationRepo.delete(medication);
+
+        Medication[] medications = pet.getMedications();
+        Medication[] newMedications = new Medication[medications.length - 1];
+        for (int i = 0; i < medications.length; i++) {
+            if (!medications[i].getId().equals(id)) {
+                newMedications[i] = medications[i];
+            }
+        }
+        pet.setMedications(newMedications);
+        petRepo.save(pet);
     }
 
     // get medication from db using its id
