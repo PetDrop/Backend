@@ -1,5 +1,7 @@
 package com.example.petdrop.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -13,21 +15,39 @@ public class Medication {
     private String name;
     private String color;
     private String description;
-    private DateObj[] dates;
 
-    @DocumentReference(collection = "reminder")
-    private Reminder reminder;
+    @DocumentReference(collection = "notification")
+    private List<Notification> notifications;
 
     private int range;
-    
-    public Medication(String id, String name, String color, String description, DateObj[] dates, Reminder reminder, int range) {
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("id: " + id + "\n");
+        result.append("name: " + name + "\n");
+        result.append("color: " + color + "\n");
+        result.append("desc: " + description + "\n");
+        result.append("notifications: [");
+        if (!(notifications == null)) {
+            result.append("\n");
+            for (Notification notif : notifications) {
+                result.append(notif.toString() + ",\n\n");
+            }
+        }
+        result.append("]\n");
+        result.append("range: " + range);
+        return result.toString();
+    }
+
+    public Medication(String id, String name, String color, String description, List<Notification> notifications,
+            int range) {
         super();
         this.id = id;
         this.name = name;
         this.color = color;
         this.description = description;
-        this.dates = dates;
-        this.reminder = reminder;
+        this.notifications = notifications;
         this.range = range;
     }
 
@@ -47,12 +67,8 @@ public class Medication {
         return description;
     }
 
-    public DateObj[] getDates() {
-        return dates;
-    }
-
-    public Reminder getReminder() {
-        return reminder;
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
     public int getRange() {
@@ -75,12 +91,8 @@ public class Medication {
         this.description = description;
     }
 
-    public void setDates(DateObj[] dates) {
-        this.dates = dates;
-    }
-
-    public void setReminder(Reminder reminder) {
-        this.reminder = reminder;
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     public void setRange(int range) {

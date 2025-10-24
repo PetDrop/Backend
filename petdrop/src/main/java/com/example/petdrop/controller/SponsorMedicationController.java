@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.petdrop.model.SponsorMedication;
@@ -24,57 +23,38 @@ public class SponsorMedicationController {
     private SponsorMedicationRepository sponsorMedicationRepo;
 
     // save sponsor medication to db
-    @PostMapping("/addsponsormedication")
+    @PostMapping("/add-sponsor-medication")
     public SponsorMedication addSponsorMedication(@RequestBody SponsorMedication sponsorMedication) {
         return sponsorMedicationRepo.save(sponsorMedication);
     }
 
-    // use PUT for updating whole sponsor medications
-    // updatedSponsorSponsorMedication must have all fields, not just ones to be updated
-    @PutMapping("/updatesponsormedication")
+    // update all fields of sponssor medication
+    @PutMapping("/update-sponsor-medication")
     public ResponseEntity<SponsorMedication> updateSponsorMedication(@RequestBody SponsorMedication updatedSponsorMedication) {
         SponsorMedication savedSponsorMedication = sponsorMedicationRepo.save(updatedSponsorMedication);
         return ResponseEntity.ok(savedSponsorMedication);
     }
 
-    // update a sponsor medication's name
-    @PatchMapping("/updatesponsormedication/name/{id}")
-    public long updateSponsorMedicationName(@PathVariable String id, @RequestBody String name) {
-        return sponsorMedicationRepo.updateSponsorMedicationName(id, name);
-    }
-
-    // update a sponsor medication's instructions
-    @PatchMapping("/updatesponsormedication/instructions/{id}")
-    public long updateSponsorMedicationInstructions(@PathVariable String id, @RequestBody String[] instructions) {
-        return sponsorMedicationRepo.updateSponsorMedicationInstructions(id, instructions);
-    }
-
-    // update a sponsor medication's video link
-    @PatchMapping("/updatesponsormedication/videolink/{id}")
-    public long updateSponsorMedicationVideoLink(@PathVariable String id, @RequestBody String videoLink) {
-        return sponsorMedicationRepo.updateSponsorMedicationVideoLink(id, videoLink);
-    }
-
     // get all sponsor medications from db
-    @GetMapping("/getallsponsormedications")
+    @GetMapping("/get-all-sponsor-medications")
     public List<SponsorMedication> getAllSponsorMedications() {
         return sponsorMedicationRepo.findAll();
     }
 
     // get sponsor medication from db using its id
-    @GetMapping("/getsponsormedicationbyid/{id}")
+    @GetMapping("/get-sponsor-medication-by-id/{id}")
     public Optional<SponsorMedication> getSponsorMedicationById(@PathVariable String id) {
         return sponsorMedicationRepo.findById(id);
     }
 
     // get sponsor medication from db using its name
-    @GetMapping("/getsponsormedicationbyname/{name}")
+    @GetMapping("/get-sponsor-medication-by-name/{name}")
     public Optional<SponsorMedication> getSponsorMedicationByName(@PathVariable String name) {
         return sponsorMedicationRepo.findByName(name);
     }
 
     // delete sponsor medication from db using its id
-    @DeleteMapping("/deletesponsormedicationbyid/{id}")
+    @DeleteMapping("/delete-sponsor-medication/{id}")
     public void deleteSponsorMedicationById(@PathVariable String id) {
         sponsorMedicationRepo.deleteById(id);
     }
