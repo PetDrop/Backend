@@ -1,5 +1,8 @@
 package com.example.petdrop.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.petdrop.model.Notification;
@@ -40,14 +44,20 @@ public class NotificationController {
     }
 
     @DeleteMapping("/delete-notification/{id}")
-    public void deleteNotification(@PathVariable String notifId, @RequestBody String medId) {
+    public void deleteNotification(@PathVariable String id, @RequestParam String medId) {
         Medication med = medRepo.findById(medId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Medication not found"));
-        Notification notifToDelete = notifRepo.findById(notifId)
+        Notification notifToDelete = notifRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification not found"));
 
-        med.getNotifications().remove(notifToDelete);   
+        // Remove the notification from the medication's list by filtering
+        List<Notification> updatedNotifications = med.getNotifications().stream()
+                .filter(notif -> !notif.getId().equals(id))
+                .collect(Collectors.toList());
+        med.setNotifications(updatedNotifications);
         medRepo.save(med);
+        
+        // Delete the notification from the notification collection
         notifRepo.delete(notifToDelete);
     }
 }
