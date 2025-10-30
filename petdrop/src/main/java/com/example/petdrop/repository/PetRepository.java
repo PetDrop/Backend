@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import com.example.petdrop.model.Pet;
 
 public interface PetRepository extends MongoRepository<Pet, String> {
-	
-	@Query("{medications.id:'?0'}")
+
+	@Query("{ 'medications.id': ?0 }")
 	Optional<Pet> findPetByMedicationId(String medicationId);
 }
