@@ -16,11 +16,12 @@ public class Account {
     private String[] sharedUsers; // users they request info from
     private String[] usersSharedWith; // users they volunteer their info to
     private String image; // profile picture
+    private String expoPushToken; // device push notification token
 
     @DocumentReference(collection = "pet")
     private Pet[] pets;
 
-    public Account(String id, String username, String email, String password, String[] sharedUsers, String[] usersSharedWith, Pet[] pets, String image) {
+    public Account(String id, String username, String email, String password, String[] sharedUsers, String[] usersSharedWith, Pet[] pets, String image, String expoPushToken) {
         super();
         this.id = id;
         this.username = username;
@@ -30,6 +31,7 @@ public class Account {
         this.usersSharedWith = usersSharedWith;
         this.pets = pets;
         this.image = image;
+        this.expoPushToken = expoPushToken;
     }
 
     public String getId() {
@@ -94,5 +96,13 @@ public class Account {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getExpoPushToken() {
+        return expoPushToken;
+    }
+
+    public void setExpoPushToken(String expoPushToken) {
+        this.expoPushToken = expoPushToken;
     }
 }
