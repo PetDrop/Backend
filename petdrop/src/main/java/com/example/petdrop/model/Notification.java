@@ -11,7 +11,7 @@ public class Notification {
     @Id
     private String id;
 
-    private String expoPushToken; // device token
+    private String ownerUsername; // username of the pet owner
     private String title;
     private String body;
     private Map<String, Object> data;
@@ -24,10 +24,10 @@ public class Notification {
         super();
     }
 
-    public Notification(String id, String expoPushToken, String title, String body, Map<String, Object> data,
+    public Notification(String id, String ownerUsername, String title, String body, Map<String, Object> data,
                                 Instant[] nextRuns, Instant[] finalRuns, String repeatInterval) {
         this.id = id;
-        this.expoPushToken = expoPushToken;
+        this.ownerUsername = ownerUsername;
         this.title = title;
         this.body = body;
         this.data = data;
@@ -44,12 +44,12 @@ public class Notification {
         this.id = id;
     }
 
-    public String getExpoPushToken() {
-        return expoPushToken;
+    public String getOwnerUsername() {
+        return ownerUsername;
     }
 
-    public void setExpoPushToken(String expoPushToken) {
-        this.expoPushToken = expoPushToken;
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
     }
 
     public String getTitle() {

@@ -1,5 +1,6 @@
 package com.example.petdrop.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -14,4 +15,7 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	
 	@Query("{username:'?0'}")
 	Optional<Account> findAccountByUsername(String username);
+	
+	@Query("{ 'sharedUsers': ?0 }")
+	List<Account> findAccountsWithSharedUser(String username);
 }
