@@ -32,7 +32,7 @@ public class ExpoPushService {
     private static final String EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send";
     private static final int MAX_RETRIES = 3;
     private static final long INITIAL_RETRY_DELAY_MS = 1000; // 1 second
-    private static final double BACKOFF_MULTIPLIER = 2.0;
+    private static final double BACKOFF_MULTIPLIER = 5.0;
 
     public ExpoPushService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
