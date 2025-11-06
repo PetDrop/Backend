@@ -21,8 +21,9 @@ public class Pet {
 
     @DocumentReference(collection = "medication")
     private Medication[] medications;
-    
-    public Pet(String id, String name, String image, int age, String breed, String address, String vet, String vetPhone, boolean editable, Medication[] medications) {
+
+    public Pet(String id, String name, String image, int age, String breed, String address, String vet, String vetPhone,
+            boolean editable, Medication[] medications) {
         super();
         this.id = id;
         this.name = name;

@@ -21,7 +21,8 @@ public class Account {
     @DocumentReference(collection = "pet")
     private Pet[] pets;
 
-    public Account(String id, String username, String email, String password, String[] sharedUsers, String[] usersSharedWith, Pet[] pets, String image, String expoPushToken) {
+    public Account(String id, String username, String email, String password, String[] sharedUsers,
+            String[] usersSharedWith, Pet[] pets, String image, String expoPushToken) {
         super();
         this.id = id;
         this.username = username;

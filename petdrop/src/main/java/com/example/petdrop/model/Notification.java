@@ -25,7 +25,7 @@ public class Notification {
     }
 
     public Notification(String id, String ownerUsername, String title, String body, Map<String, Object> data,
-                                Instant[] nextRuns, Instant[] finalRuns, String repeatInterval) {
+            Instant[] nextRuns, Instant[] finalRuns, String repeatInterval) {
         this.id = id;
         this.ownerUsername = ownerUsername;
         this.title = title;

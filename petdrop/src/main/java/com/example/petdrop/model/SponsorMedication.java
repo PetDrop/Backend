@@ -12,7 +12,7 @@ public class SponsorMedication {
     private String name;
     private String[] instructions;
     private String videoLink;
-    
+
     public SponsorMedication(String id, String name, String[] instructions, String videoLink) {
         super();
         this.id = id;

@@ -19,7 +19,8 @@ public class PasswordResetCode {
 	private Integer maxAttempts;
 	private Instant usedAt;
 
-	public PasswordResetCode() {}
+	public PasswordResetCode() {
+	}
 
 	public PasswordResetCode(String email, String codeHash, Instant createdAt, Instant expiresAt, Integer maxAttempts) {
 		this.email = email;
@@ -30,23 +31,67 @@ public class PasswordResetCode {
 		this.maxAttempts = maxAttempts;
 	}
 
-	public String getId() { return id; }
-	public String getEmail() { return email; }
-	public String getCodeHash() { return codeHash; }
-	public Instant getCreatedAt() { return createdAt; }
-	public Instant getExpiresAt() { return expiresAt; }
-	public Integer getAttempts() { return attempts; }
-	public Integer getMaxAttempts() { return maxAttempts; }
-	public Instant getUsedAt() { return usedAt; }
+	public String getId() {
+		return id;
+	}
 
-	public void setId(String id) { this.id = id; }
-	public void setEmail(String email) { this.email = email; }
-	public void setCodeHash(String codeHash) { this.codeHash = codeHash; }
-	public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-	public void setExpiresAt(Instant expiresAt) { this.expiresAt = expiresAt; }
-	public void setAttempts(Integer attempts) { this.attempts = attempts; }
-	public void setMaxAttempts(Integer maxAttempts) { this.maxAttempts = maxAttempts; }
-	public void setUsedAt(Instant usedAt) { this.usedAt = usedAt; }
+	public String getEmail() {
+		return email;
+	}
+
+	public String getCodeHash() {
+		return codeHash;
+	}
+
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public Instant getExpiresAt() {
+		return expiresAt;
+	}
+
+	public Integer getAttempts() {
+		return attempts;
+	}
+
+	public Integer getMaxAttempts() {
+		return maxAttempts;
+	}
+
+	public Instant getUsedAt() {
+		return usedAt;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setCodeHash(String codeHash) {
+		this.codeHash = codeHash;
+	}
+
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public void setExpiresAt(Instant expiresAt) {
+		this.expiresAt = expiresAt;
+	}
+
+	public void setAttempts(Integer attempts) {
+		this.attempts = attempts;
+	}
+
+	public void setMaxAttempts(Integer maxAttempts) {
+		this.maxAttempts = maxAttempts;
+	}
+
+	public void setUsedAt(Instant usedAt) {
+		this.usedAt = usedAt;
+	}
 }
-
-
