@@ -18,4 +18,7 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 	
 	@Query("{ 'sharedUsers': ?0 }")
 	List<Account> findAccountsWithSharedUser(String username);
+	
+	@Query("{expoPushToken:'?0'}")
+	List<Account> findAccountsByPushToken(String pushToken);
 }
