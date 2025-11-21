@@ -38,7 +38,7 @@ public class NotificationController {
         return notifRepo.save(notification);
     }
 
-    @PutMapping("update-notification")
+    @PutMapping("/update-notification")
     public Notification updateNotification(@RequestBody Notification notification) {
         return notifRepo.save(notification);
     }
