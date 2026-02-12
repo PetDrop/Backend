@@ -13,6 +13,7 @@ public class Pet {
     private String name;
     private String image;
     private int age;
+    private String species;
     private String breed;
     private String address;
     private String vet;
@@ -22,13 +23,14 @@ public class Pet {
     @DocumentReference(collection = "medication")
     private Medication[] medications;
 
-    public Pet(String id, String name, String image, int age, String breed, String address, String vet, String vetPhone,
+    public Pet(String id, String name, String image, int age, String species, String breed, String address, String vet, String vetPhone,
             boolean editable, Medication[] medications) {
         super();
         this.id = id;
         this.name = name;
         this.image = image;
         this.age = age;
+        this.species = species;
         this.breed = breed;
         this.address = address;
         this.vet = vet;
@@ -51,6 +53,10 @@ public class Pet {
 
     public int getAge() {
         return age;
+    }
+
+    public String getSpecies() {
+        return species;
     }
 
     public String getBreed() {
@@ -91,6 +97,10 @@ public class Pet {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public void setBreed(String breed) {
