@@ -43,8 +43,11 @@ public class MedicationController {
         Pet pet = petRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found"));
 
-        // Save notifications first
-        List<Notification> savedNotifications = notificationRepo.saveAll(medication.getNotifications());
+        // Save notifications first (handle null case)
+        List<Notification> savedNotifications = new ArrayList<>();
+        if (medication.getNotifications() != null && !medication.getNotifications().isEmpty()) {
+            savedNotifications = notificationRepo.saveAll(medication.getNotifications());
+        }
         medication.setNotifications(savedNotifications);
 
         // Save the medication

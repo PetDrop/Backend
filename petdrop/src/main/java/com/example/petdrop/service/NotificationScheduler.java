@@ -1,6 +1,8 @@
 package com.example.petdrop.service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,12 @@ public class NotificationScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void processNotifications() {
-        Instant curTime = Instant.now();
-        List<Notification> dueNotifs = repo.findDueNotifications(curTime);
-        if (dueNotifs.isEmpty()) {
-            return;
-        }
+        try {
+            Instant curTime = Instant.now();
+            List<Notification> dueNotifs = repo.findDueNotifications(curTime);
+            if (dueNotifs.isEmpty()) {
+                return;
+            }
 
         // Send notifications to all recipients (owner + shared users)
         for (Notification notif : dueNotifs) {
@@ -64,10 +67,14 @@ public class NotificationScheduler {
                                     nextRuns[i] = nextRuns[i].plus(1, ChronoUnit.DAYS);
                                     break;
                                 case "weekly":
-                                    nextRuns[i] = nextRuns[i].plus(1, ChronoUnit.WEEKS);
+                                    // Instant doesn't support WEEKS, so use 7 days instead
+                                    nextRuns[i] = nextRuns[i].plus(7, ChronoUnit.DAYS);
                                     break;
                                 case "monthly":
-                                    nextRuns[i] = nextRuns[i].plus(1, ChronoUnit.MONTHS);
+                                    // Instant doesn't support MONTHS, convert to LocalDateTime, add month, then convert back
+                                    LocalDateTime ldt = LocalDateTime.ofInstant(nextRuns[i], ZoneId.systemDefault());
+                                    ldt = ldt.plusMonths(1);
+                                    nextRuns[i] = ldt.atZone(ZoneId.systemDefault()).toInstant();
                                     break;
                                 default:
                                     // Unknown interval
@@ -98,6 +105,14 @@ public class NotificationScheduler {
         }
         if (!toUpdate.isEmpty()) {
         repo.saveAll(toUpdate);
+        }
+        } catch (Exception e) {
+            // Log error but don't crash the application
+            System.err.println("[ERROR] Failed to process notifications: " + e.getMessage());
+            if (e.getCause() != null) {
+                System.err.println("[ERROR] Cause: " + e.getCause().getMessage());
+            }
+            // Don't rethrow - allow the application to continue running
         }
     }
 
