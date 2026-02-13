@@ -2,8 +2,10 @@ package com.example.petdrop.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -22,18 +24,20 @@ public class NotificationSharingService {
     /**
      * Finds all push tokens for users who should receive a notification for a given owner.
      * This includes the owner themselves and any users with bidirectional sharing.
-     * 
+     * Tokens are deduplicated so the same device (e.g. one phone with multiple accounts)
+     * receives only one notification.
+     *
      * @param ownerUsername The username of the pet owner
      * @return List of expo push tokens for all recipients (owner + shared users)
      */
     public List<String> findAllRecipients(String ownerUsername) {
-        List<String> pushTokens = new ArrayList<>();
+        Set<String> pushTokens = new LinkedHashSet<>();
 
         // Find the owner account
         Optional<Account> ownerOpt = accountRepo.findAccountByUsername(ownerUsername);
         if (!ownerOpt.isPresent()) {
             System.err.println("Owner account not found: " + ownerUsername);
-            return pushTokens;
+            return new ArrayList<>();
         }
 
         Account owner = ownerOpt.get();
@@ -50,7 +54,7 @@ public class NotificationSharingService {
         String[] usersSharedWith = owner.getUsersSharedWith();
         if (usersSharedWith != null) {
             List<String> ownerSharesList = Arrays.asList(usersSharedWith);
-            
+
             for (Account recipient : potentialRecipients) {
                 // Check bidirectional: recipient has owner in sharedUsers AND owner has recipient in usersSharedWith
                 if (ownerSharesList.contains(recipient.getUsername())) {
@@ -62,7 +66,7 @@ public class NotificationSharingService {
             }
         }
 
-        return pushTokens;
+        return new ArrayList<>(pushTokens);
     }
 }
 
