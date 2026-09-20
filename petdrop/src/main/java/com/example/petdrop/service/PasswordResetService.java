@@ -43,7 +43,8 @@ public class PasswordResetService {
 		Optional<PasswordResetCode> latestOpt = resetCodeRepository.findFirstByEmailOrderByCreatedAtDesc(email);
 		if (latestOpt.isPresent()) {
 			PasswordResetCode latest = latestOpt.get();
-			if (latest.getCreatedAt() != null && latest.getCreatedAt().isAfter(now.minus(REQUEST_THROTTLE)) && latest.getUsedAt() == null) {
+			if (latest.getCreatedAt() != null && latest.getCreatedAt().isAfter(now.minus(REQUEST_THROTTLE))
+					&& latest.getUsedAt() == null) {
 				// Throttle: do not create a new code if requested too soon
 				return;
 			}
@@ -71,9 +72,13 @@ public class PasswordResetService {
 		}
 		PasswordResetCode latest = latestOpt.get();
 		Instant now = Instant.now();
-		if (latest.getUsedAt() != null) return false;
-		if (latest.getExpiresAt() != null && now.isAfter(latest.getExpiresAt())) return false;
-		if (latest.getAttempts() != null && latest.getMaxAttempts() != null && latest.getAttempts() >= latest.getMaxAttempts()) return false;
+		if (latest.getUsedAt() != null)
+			return false;
+		if (latest.getExpiresAt() != null && now.isAfter(latest.getExpiresAt()))
+			return false;
+		if (latest.getAttempts() != null && latest.getMaxAttempts() != null
+				&& latest.getAttempts() >= latest.getMaxAttempts())
+			return false;
 
 		String providedHash = sha256(code);
 		if (!providedHash.equals(latest.getCodeHash())) {
@@ -83,12 +88,13 @@ public class PasswordResetService {
 		}
 
 		// Valid code
-		latest.setUsedAt(now);
-		resetCodeRepository.save(latest);
-
 		Account account = accountOpt.get();
 		account.setPassword(newPassword);
 		accountRepository.save(account);
+
+		// The reset code has now been consumed, so delete it.
+		resetCodeRepository.delete(latest);
+
 		return true;
 	}
 
@@ -111,5 +117,3 @@ public class PasswordResetService {
 		}
 	}
 }
-
-
