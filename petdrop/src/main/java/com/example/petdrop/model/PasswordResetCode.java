@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 @Document("password_reset_code")
 public class PasswordResetCode {
@@ -14,7 +15,10 @@ public class PasswordResetCode {
 	private String email;
 	private String codeHash;
 	private Instant createdAt;
+
+	@Indexed(expireAfter = "0s")
 	private Instant expiresAt;
+
 	private Integer attempts;
 	private Integer maxAttempts;
 	private Instant usedAt;
