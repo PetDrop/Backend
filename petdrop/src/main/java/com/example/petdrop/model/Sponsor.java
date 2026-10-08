@@ -12,13 +12,15 @@ public class Sponsor {
     private String name;
     private String description;
     private String image;
+    private String link;
 
-    public Sponsor(String id, String name, String description, String image) {
+    public Sponsor(String id, String name, String description, String image, String link) {
         super();
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
+        this.link = link;
     }
 
     public String getId() {
@@ -37,6 +39,10 @@ public class Sponsor {
         return image;
     }
 
+    public String getLink() {
+        return link;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -51,6 +57,10 @@ public class Sponsor {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
 }
